@@ -105,6 +105,30 @@
       border: 1px solid var(--line);
     }
 
+
+    .print-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #6b4a2b, #8a5a34);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      box-shadow: 0 8px 18px rgba(86, 55, 28, 0.24);
+      letter-spacing: 0.02em;
+    }
+
+    .print-button:hover {
+      background: linear-gradient(135deg, #5f3a1d, #7a4f2a);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(86, 55, 28, 0.28);
+    }
+
+    .print-button:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+
     .actions {
       display: flex;
       flex-wrap: wrap;
@@ -276,7 +300,9 @@
       <button id="showAllButton" class="secondary">すべて解答表示</button>
       <button id="hideAllButton" class="secondary">すべて隠す</button>
       <button id="resetFilterButton" class="secondary">フィルタ解除</button>
-      <button id="printCombinedPdfButton" class="secondary">PDF出力（問題＋解答）</button>
+      <button id="printCombinedPdfButton" class="print-button" title="問題と解答を2ページ構成で印刷します">
+        <span aria-hidden="true">🖨️</span> 印刷（問題＋解答）
+      </button>
     </section>
 
     <div id="status" class="status">読み込み中...</div>
@@ -456,9 +482,9 @@
       }).join("");
 
       return "<!DOCTYPE html><html lang=\"ja\"><head><meta charset=\"UTF-8\"><title>古文単語例文テスト</title>" +
-        "<style>body{font-family:\"Hiragino Mincho ProN\",\"Yu Mincho\",serif;color:#222;margin:24px;line-height:1.8}h1{text-align:center;margin:0 0 8px;font-size:24px;letter-spacing:.08em}.print-meta{text-align:center;color:#666;font-size:12px;margin-bottom:18px}.print-section{break-after:page;page-break-after:always}.print-section:last-child{break-after:auto;page-break-after:auto}.print-card{break-inside:avoid;page-break-inside:avoid;border-bottom:1px solid #ddd;padding:10px 0 12px}.print-head{font-weight:bold;color:#7a4f2a;margin-bottom:4px}.print-sentence{font-size:16px;margin:0 0 4px}.target{text-decoration:underline;text-decoration-thickness:.12em;text-underline-offset:.2em;font-weight:bold}.print-source{text-align:right;color:#666;font-size:12px;margin-bottom:6px}.print-answer{margin-top:8px;padding:8px 10px;background:#f6f0e8;border-radius:8px;font-size:14px}.print-label{display:block;font-weight:bold;color:#666;font-size:12px;margin-bottom:2px}.print-base{color:#666;font-size:12px;margin-top:4px}@page{margin:14mm}</style></head><body>" +
-        "<section class=\"print-section\"><h1>古文単語例文テスト 問題</h1><div class=\"print-meta\">" + meta + "</div>" + problemCards + "</section>" +
-        "<section class=\"print-section\"><h1>古文単語例文テスト 解答</h1><div class=\"print-meta\">" + meta + "</div>" + answerCards + "</section>" +
+        "<style>@page{size:A4 portrait;margin:12mm 13mm}*{box-sizing:border-box}body{font-family:\"Hiragino Mincho ProN\",\"Yu Mincho\",\"YuMincho\",serif;color:#222;margin:0;line-height:1.65;font-size:12.5pt}h1{text-align:center;margin:0 0 4mm;font-size:18pt;letter-spacing:.08em}.print-meta{text-align:center;color:#666;font-size:9.5pt;margin-bottom:5mm}.print-section{break-after:page;page-break-after:always}.print-section:last-child{break-after:auto;page-break-after:auto}.print-grid{display:grid;grid-template-columns:1fr;gap:0}.print-card{break-inside:avoid;page-break-inside:avoid;border-bottom:1px solid #d8d0c5;padding:3.2mm 0 3.6mm}.print-head{font-weight:bold;color:#7a4f2a;margin-bottom:1mm;font-size:11pt}.print-sentence{font-size:13pt;margin:0 0 1mm;line-height:1.8}.target{text-decoration:underline;text-decoration-thickness:.11em;text-underline-offset:.2em;font-weight:bold}.print-source{text-align:right;color:#666;font-size:9.5pt;margin:0 0 1mm}.print-answer{margin-top:2mm;padding:2.2mm 3mm;background:#f6f0e8;border:1px solid #e3d8c8;border-radius:3mm;font-size:11.5pt}.print-label{display:block;font-weight:bold;color:#666;font-size:9.5pt;margin-bottom:1mm}.print-base{color:#666;font-size:9.5pt;margin-top:1mm}.print-footer{position:fixed;bottom:5mm;left:13mm;right:13mm;text-align:center;color:#999;font-size:8.5pt}@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style></head><body>" +
+        "<section class=\"print-section\"><h1>古文単語例文テスト 問題</h1><div class=\"print-meta\">" + meta + "</div><div class=\"print-grid\">" + problemCards + "</div><div class=\"print-footer\">問題</div></section>" +
+        "<section class=\"print-section\"><h1>古文単語例文テスト 解答</h1><div class=\"print-meta\">" + meta + "</div><div class=\"print-grid\">" + answerCards + "</div><div class=\"print-footer\">解答</div></section>" +
         "<script>window.addEventListener(\"load\",function(){window.print();});<\/script></body></html>";
     }
 
@@ -466,7 +492,7 @@
       if (!currentQuestions.length) return;
       const printWindow = window.open("", "_blank");
       if (!printWindow) {
-        alert("PDF出力用の別ウィンドウを開けませんでした。ポップアップブロックを解除してください。");
+        alert("印刷用の別ウィンドウを開けませんでした。ポップアップブロックを解除してください。");
         return;
       }
       printWindow.document.open();
