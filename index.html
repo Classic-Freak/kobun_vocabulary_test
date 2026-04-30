@@ -221,6 +221,224 @@
   }
 }
 
+
+/* Manual theme override */
+html[data-theme="light"] {
+  color-scheme: light;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+html[data-theme="dark"] {
+  --bg: #11100f;
+  --card: #211d19;
+  --text: #fff7ec;
+  --muted: #d0c0ad;
+  --accent: #f0b36a;
+  --accent-dark: #d89448;
+  --line: #5a4a3a;
+  --answer-bg: #332a22;
+  --shadow: 0 12px 30px rgba(0, 0, 0, 0.48);
+}
+
+html[data-theme="dark"] body {
+  background: radial-gradient(circle at top, #342a21 0%, var(--bg) 52%, #080807 100%);
+  color: var(--text);
+}
+
+html[data-theme="dark"] .description,
+html[data-theme="dark"] .status,
+html[data-theme="dark"] .base,
+html[data-theme="dark"] .answer-label,
+html[data-theme="dark"] footer,
+html[data-theme="dark"] .source,
+html[data-theme="dark"] .card-head {
+  color: var(--muted);
+}
+
+html[data-theme="dark"] .card {
+  background: var(--card);
+  border-color: var(--line);
+  box-shadow: var(--shadow);
+}
+
+html[data-theme="dark"] .sentence {
+  color: var(--text);
+}
+
+html[data-theme="dark"] .target {
+  color: #fffaf2;
+  text-decoration-color: #ffd18f;
+  background: linear-gradient(transparent 58%, rgba(240, 179, 106, 0.42) 58%);
+}
+
+html[data-theme="dark"] .answer {
+  background: var(--answer-bg);
+  border: 1px solid #4f4032;
+  color: var(--text);
+}
+
+html[data-theme="dark"] button {
+  background: var(--accent);
+  color: #1d130a;
+  box-shadow: 0 7px 16px rgba(240, 179, 106, 0.22);
+}
+
+html[data-theme="dark"] button:hover {
+  background: var(--accent-dark);
+}
+
+html[data-theme="dark"] select,
+html[data-theme="dark"] .secondary {
+  background: #2a241e;
+  color: var(--text);
+  border-color: var(--line);
+}
+
+html[data-theme="dark"] .save-button,
+html[data-theme="dark"] .review-save-button,
+html[data-theme="dark"] .save-toggle-button {
+  background: #3a2d22;
+  color: #ffdca8;
+  border: 1px solid #8c6741;
+  box-shadow: none;
+}
+
+/* Teaching-material print layout */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 14mm 12mm;
+  }
+
+  html, body {
+    background: #fff !important;
+    color: #111 !important;
+    font-family: "Yu Mincho", "Hiragino Mincho ProN", "Yu Gothic", serif !important;
+  }
+
+  .app {
+    width: 100% !important;
+    max-width: none !important;
+    padding: 0 !important;
+  }
+
+  header {
+    margin-bottom: 10mm !important;
+    border-bottom: 2px solid #111;
+    padding-bottom: 4mm;
+  }
+
+  h1 {
+    font-size: 20pt !important;
+    letter-spacing: 0.08em;
+    text-align: center;
+  }
+
+  .description,
+  .toolbar,
+  .status,
+  footer,
+  button,
+  select,
+  .save-button,
+  .review-save-button,
+  .save-toggle-button {
+    display: none !important;
+  }
+
+  .print-section {
+    display: block !important;
+  }
+
+  .print-page {
+    page-break-after: always;
+  }
+
+  .print-page:last-child {
+    page-break-after: auto;
+  }
+
+  .print-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    border-bottom: 2px solid #111;
+    padding-bottom: 3mm;
+    margin-bottom: 6mm;
+  }
+
+  .print-title h2 {
+    margin: 0;
+    font-size: 18pt;
+    letter-spacing: 0.08em;
+  }
+
+  .print-meta {
+    font-size: 10pt;
+  }
+
+  .print-list {
+    display: grid;
+    gap: 4mm;
+  }
+
+  .print-item {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    border: 1px solid #222;
+    border-radius: 0;
+    padding: 4mm;
+    background: #fff !important;
+  }
+
+  .print-question-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 8mm;
+    font-size: 10pt;
+    margin-bottom: 2mm;
+  }
+
+  .print-qno {
+    font-weight: bold;
+  }
+
+  .print-source {
+    text-align: right;
+    color: #333 !important;
+  }
+
+  .print-sentence {
+    font-size: 12.5pt;
+    line-height: 1.9;
+    margin: 0;
+  }
+
+  .print-answer-box {
+    margin-top: 2.5mm;
+    padding-top: 2.5mm;
+    border-top: 1px dashed #555;
+    font-size: 11pt;
+    line-height: 1.7;
+  }
+
+  .target {
+    text-decoration: underline !important;
+    text-decoration-thickness: 1.5px !important;
+    text-underline-offset: 3px !important;
+    background: transparent !important;
+    color: #111 !important;
+    font-weight: bold !important;
+  }
+
+  .quiz {
+    display: none !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -231,7 +449,9 @@
     </header>
 
     <section class="toolbar" aria-label="出題設定">
-      <div class="control"><label for="questionCount">出題数</label><select id="questionCount"><option value="10" selected>10問</option><option value="5">5問</option><option value="20">20問</option><option value="50">50問</option></select></div>
+      <div class="control"><label for="questionCount">出題数</label><select id="questionCount"><option value="10" selected>10問</option><option value="5">5問</option><option value="20">20問</option><option value="50">50問</option></select>
+      
+</div>
       <div class="control"><label for="sourceFilter">出典</label><select id="sourceFilter"><option value="">すべての出典</option></select></div>
       <div class="control"><label for="rowFilter">単語の行</label><select id="rowFilter"><option value="">すべての行</option><option value="ア行">ア行</option><option value="カ行">カ行</option><option value="サ行">サ行</option><option value="タ行">タ行</option><option value="ナ行">ナ行</option><option value="ハ行">ハ行</option><option value="マ行">マ行</option><option value="ヤ行">ヤ行</option><option value="ラ行">ラ行</option><option value="ワ行">ワ行</option><option value="その他">その他</option></select></div>
       <button id="newQuizButton">ランダム出題</button>
@@ -241,13 +461,14 @@
       <button id="showAllButton" class="secondary">すべて解答表示</button>
       <button id="hideAllButton" class="secondary">すべて隠す</button>
       <button id="resetFilterButton" class="secondary">フィルタ解除</button>
-      <button id="printCombinedPdfButton" class="print-button" title="問題と解答を2ページ構成で印刷します"><span aria-hidden="true">🖨️</span> 印刷（問題＋解答）</button>
+      <button id="printCombinedPdfButton" class="print-button" title="問題と解答を2ページ構成で印刷します"><span aria-hidden="true">🖨️</span> 🖨️ 印刷（問題＋解答）</button>
       <button id="reviewModeButton" class="secondary">復習用に保存した問題を出題</button>
       <button id="clearSavedButton" class="danger">保存済みを全削除</button>
     </section>
 
     <div id="status" class="status">読み込み中...</div>
     <section id="quiz" class="quiz" aria-live="polite"></section>
+    <section id="printSection" class="print-section" aria-hidden="true" style="display:none;"></section>
     <footer>採点なし・解答確認用</footer>
   </main>
 
@@ -426,6 +647,224 @@
   }
 }
 
+
+/* Manual theme override */
+html[data-theme="light"] {
+  color-scheme: light;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+html[data-theme="dark"] {
+  --bg: #11100f;
+  --card: #211d19;
+  --text: #fff7ec;
+  --muted: #d0c0ad;
+  --accent: #f0b36a;
+  --accent-dark: #d89448;
+  --line: #5a4a3a;
+  --answer-bg: #332a22;
+  --shadow: 0 12px 30px rgba(0, 0, 0, 0.48);
+}
+
+html[data-theme="dark"] body {
+  background: radial-gradient(circle at top, #342a21 0%, var(--bg) 52%, #080807 100%);
+  color: var(--text);
+}
+
+html[data-theme="dark"] .description,
+html[data-theme="dark"] .status,
+html[data-theme="dark"] .base,
+html[data-theme="dark"] .answer-label,
+html[data-theme="dark"] footer,
+html[data-theme="dark"] .source,
+html[data-theme="dark"] .card-head {
+  color: var(--muted);
+}
+
+html[data-theme="dark"] .card {
+  background: var(--card);
+  border-color: var(--line);
+  box-shadow: var(--shadow);
+}
+
+html[data-theme="dark"] .sentence {
+  color: var(--text);
+}
+
+html[data-theme="dark"] .target {
+  color: #fffaf2;
+  text-decoration-color: #ffd18f;
+  background: linear-gradient(transparent 58%, rgba(240, 179, 106, 0.42) 58%);
+}
+
+html[data-theme="dark"] .answer {
+  background: var(--answer-bg);
+  border: 1px solid #4f4032;
+  color: var(--text);
+}
+
+html[data-theme="dark"] button {
+  background: var(--accent);
+  color: #1d130a;
+  box-shadow: 0 7px 16px rgba(240, 179, 106, 0.22);
+}
+
+html[data-theme="dark"] button:hover {
+  background: var(--accent-dark);
+}
+
+html[data-theme="dark"] select,
+html[data-theme="dark"] .secondary {
+  background: #2a241e;
+  color: var(--text);
+  border-color: var(--line);
+}
+
+html[data-theme="dark"] .save-button,
+html[data-theme="dark"] .review-save-button,
+html[data-theme="dark"] .save-toggle-button {
+  background: #3a2d22;
+  color: #ffdca8;
+  border: 1px solid #8c6741;
+  box-shadow: none;
+}
+
+/* Teaching-material print layout */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 14mm 12mm;
+  }
+
+  html, body {
+    background: #fff !important;
+    color: #111 !important;
+    font-family: "Yu Mincho", "Hiragino Mincho ProN", "Yu Gothic", serif !important;
+  }
+
+  .app {
+    width: 100% !important;
+    max-width: none !important;
+    padding: 0 !important;
+  }
+
+  header {
+    margin-bottom: 10mm !important;
+    border-bottom: 2px solid #111;
+    padding-bottom: 4mm;
+  }
+
+  h1 {
+    font-size: 20pt !important;
+    letter-spacing: 0.08em;
+    text-align: center;
+  }
+
+  .description,
+  .toolbar,
+  .status,
+  footer,
+  button,
+  select,
+  .save-button,
+  .review-save-button,
+  .save-toggle-button {
+    display: none !important;
+  }
+
+  .print-section {
+    display: block !important;
+  }
+
+  .print-page {
+    page-break-after: always;
+  }
+
+  .print-page:last-child {
+    page-break-after: auto;
+  }
+
+  .print-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    border-bottom: 2px solid #111;
+    padding-bottom: 3mm;
+    margin-bottom: 6mm;
+  }
+
+  .print-title h2 {
+    margin: 0;
+    font-size: 18pt;
+    letter-spacing: 0.08em;
+  }
+
+  .print-meta {
+    font-size: 10pt;
+  }
+
+  .print-list {
+    display: grid;
+    gap: 4mm;
+  }
+
+  .print-item {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    border: 1px solid #222;
+    border-radius: 0;
+    padding: 4mm;
+    background: #fff !important;
+  }
+
+  .print-question-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 8mm;
+    font-size: 10pt;
+    margin-bottom: 2mm;
+  }
+
+  .print-qno {
+    font-weight: bold;
+  }
+
+  .print-source {
+    text-align: right;
+    color: #333 !important;
+  }
+
+  .print-sentence {
+    font-size: 12.5pt;
+    line-height: 1.9;
+    margin: 0;
+  }
+
+  .print-answer-box {
+    margin-top: 2.5mm;
+    padding-top: 2.5mm;
+    border-top: 1px dashed #555;
+    font-size: 11pt;
+    line-height: 1.7;
+  }
+
+  .target {
+    text-decoration: underline !important;
+    text-decoration-thickness: 1.5px !important;
+    text-underline-offset: 3px !important;
+    background: transparent !important;
+    color: #111 !important;
+    font-weight: bold !important;
+  }
+
+  .quiz {
+    display: none !important;
+  }
+}
+
 </style></head><body><section class="print-section"><h1>古文単語例文テスト 問題</h1><div class="print-meta">${meta}</div>${problemCards}<div class="print-footer">問題</div></section><section class="print-section"><h1>古文単語例文テスト 解答</h1><div class="print-meta">${meta}</div>${answerCards}<div class="print-footer">解答</div></section><script>window.addEventListener("load",function(){window.print();});<\/script></body></html>`;
     }
 
@@ -465,6 +904,71 @@
       }
     }
     loadData();
-  </script>
+  
+}
+
+// Teaching-style print pages
+function buildPrintSection() {
+  const printSection = document.getElementById("printSection");
+  if (!printSection) return;
+
+  const now = new Date();
+  const dateText = `${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日`;
+  const questions = currentQuestions || [];
+
+  const questionItems = questions.map((q, i) => `
+    <article class="print-item">
+      <div class="print-question-head">
+        <span class="print-qno">問${i + 1}</span>
+        <span class="print-source">出典：${escapeHtml(q.source || "")}</span>
+      </div>
+      <p class="print-sentence">${renderSentence(q.sentence, q.target)}</p>
+    </article>
+  `).join("");
+
+  const answerItems = questions.map((q, i) => `
+    <article class="print-item">
+      <div class="print-question-head">
+        <span class="print-qno">問${i + 1}</span>
+        <span class="print-source">出典：${escapeHtml(q.source || "")}</span>
+      </div>
+      <p class="print-sentence">${renderSentence(q.sentence, q.target)}</p>
+      <div class="print-answer-box">
+        <strong>解答：</strong>${escapeHtml(q.answer || "")}
+        ${q.base ? `<br><strong>単語：</strong>${escapeHtml(q.base)}` : ""}
+      </div>
+    </article>
+  `).join("");
+
+  printSection.innerHTML = `
+    <div class="print-page">
+      <div class="print-title">
+        <h2>古文単語例文テスト　問題</h2>
+        <div class="print-meta">氏名：＿＿＿＿＿＿＿＿　日付：${dateText}</div>
+      </div>
+      <div class="print-list">${questionItems}</div>
+    </div>
+    <div class="print-page">
+      <div class="print-title">
+        <h2>古文単語例文テスト　解答</h2>
+        <div class="print-meta">日付：${dateText}</div>
+      </div>
+      <div class="print-list">${answerItems}</div>
+    </div>
+  `;
+}
+
+const existingPrintButton = document.getElementById("printButton");
+if (existingPrintButton) {
+  existingPrintButton.textContent = "🖨️ 印刷（問題＋解答）";
+  existingPrintButton.addEventListener("click", () => {
+    buildPrintSection();
+    window.print();
+  });
+}
+
+window.addEventListener("beforeprint", buildPrintSection);
+
+</script>
 </body>
 </html>
