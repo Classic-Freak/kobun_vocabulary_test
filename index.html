@@ -15,466 +15,485 @@
       --line: #e3d8c8;
       --answer-bg: #f2eadf;
       --shadow: 0 10px 28px rgba(77, 54, 32, 0.12);
+      --save-bg: #fff7e8;
+      --save-text: #7a4f2a;
+      --save-border: #d7b88d;
     }
+
     * { box-sizing: border-box; }
+
     body {
-      margin: 0; min-height: 100vh;
+      margin: 0;
+      min-height: 100vh;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
       background: radial-gradient(circle at top, #fffaf0 0%, var(--bg) 45%, #efe6d8 100%);
       color: var(--text);
     }
-    .app { width: min(920px, 100%); margin: 0 auto; padding: 28px 18px 48px; }
-    header { text-align: center; margin-bottom: 24px; }
-    h1 { margin: 0 0 10px; font-size: clamp(1.7rem, 4vw, 2.5rem); letter-spacing: 0.04em; }
-    .description { margin: 0 auto; max-width: 680px; color: var(--muted); line-height: 1.7; }
-    .toolbar { display: grid; grid-template-columns: repeat(4, minmax(150px, 1fr)); gap: 12px; align-items: end; margin: 24px 0 14px; }
-    .control { display: flex; flex-direction: column; gap: 6px; }
-    label { color: var(--muted); font-size: 0.86rem; font-weight: 700; padding-left: 4px; }
-    button, select { border: none; border-radius: 999px; padding: 12px 18px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease; }
-    button { background: var(--accent); color: white; box-shadow: 0 7px 16px rgba(122, 79, 42, 0.25); }
-    button:hover { background: var(--accent-dark); transform: translateY(-1px); }
-    button:active { transform: translateY(0); box-shadow: none; }
-    .secondary { background: #fff; color: var(--accent); border: 1px solid var(--line); box-shadow: none; }
-    .danger { background: #fff; color: #9a3a2f; border: 1px solid #e5b5ad; box-shadow: none; }
-    .danger:hover { background: #fff0ed; color: #7f271d; }
-    select { width: 100%; background: #fff; color: var(--text); border: 1px solid var(--line); }
-    .print-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, #6b4a2b, #8a5a34); color: #fff; border: 1px solid rgba(255,255,255,.22); box-shadow: 0 8px 18px rgba(86,55,28,.24); letter-spacing: .02em; }
-    .print-button:hover { background: linear-gradient(135deg, #5f3a1d, #7a4f2a); transform: translateY(-2px); box-shadow: 0 12px 24px rgba(86,55,28,.28); }
-    .actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 8px 0 22px; align-items: end; }
-    .actions .control { min-width: 210px; }
-    .status { text-align: center; color: var(--muted); margin-bottom: 18px; min-height: 1.5em; }
-    .quiz { display: grid; gap: 16px; }
-    .card { background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 20px; box-shadow: var(--shadow); }
-    .card-head { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin: 4px 150px 12px 0; color: var(--muted); font-size: .95rem; }
-    .question-number { font-weight: 800; color: var(--accent); }
-    .sentence { font-size: clamp(1.1rem, 2.8vw, 1.45rem); line-height: 1.9; margin: 0 0 6px; }
-    .source { color: var(--muted); font-size: .92rem; margin: 0 0 14px; text-align: right; }
-    .target { text-decoration: underline; text-decoration-thickness: .14em; text-underline-offset: .22em; font-weight: 800; background: linear-gradient(transparent 62%, rgba(196,146,82,.28) 62%); border-radius: 4px; padding: 0 .08em; }
-    .answer { display: none; margin-top: 14px; padding: 14px 16px; border-radius: 16px; background: var(--answer-bg); line-height: 1.7; }
-    .answer.visible { display: block; }
-    .answer-label { display: block; color: var(--muted); font-size: .9rem; margin-bottom: 4px; font-weight: 700; }
-    .base { color: var(--muted); font-size: .95rem; margin-top: 8px; }
-    .card { position: relative; }
+
+    .app {
+      width: min(920px, 100%);
+      margin: 0 auto;
+      padding: 28px 18px 48px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(1.7rem, 4vw, 2.5rem);
+      letter-spacing: 0.04em;
+    }
+
+    .description {
+      margin: 0 auto;
+      max-width: 680px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(140px, 1fr));
+      gap: 12px;
+      align-items: end;
+      margin: 24px 0 14px;
+    }
+
+    .control {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      color: var(--muted);
+      font-size: 0.86rem;
+      font-weight: 700;
+      padding-left: 4px;
+    }
+
+    button, select {
+      border: none;
+      border-radius: 999px;
+      padding: 12px 18px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+    }
+
+    button {
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 7px 16px rgba(122, 79, 42, 0.25);
+    }
+
+    button:hover {
+      background: var(--accent-dark);
+      transform: translateY(-1px);
+    }
+
+    button:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+
+    .secondary {
+      background: #fff;
+      color: var(--accent);
+      border: 1px solid var(--line);
+      box-shadow: none;
+    }
+
+    .danger {
+      background: #fff;
+      color: #9a3a2f;
+      border: 1px solid #e4beb9;
+      box-shadow: none;
+    }
+
+    .print-button {
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      color: #fff;
+    }
+
+    select {
+      background: #fff;
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+
+    .status {
+      text-align: center;
+      color: var(--muted);
+      margin-bottom: 18px;
+      min-height: 1.5em;
+      line-height: 1.7;
+    }
+
+    .quiz {
+      display: grid;
+      gap: 16px;
+    }
+
+    .card {
+      position: relative;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 22px 20px 20px;
+      box-shadow: var(--shadow);
+    }
+
     .save-review-button {
       position: absolute;
-      top: 16px;
-      right: 16px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 13px;
-      border-radius: 999px;
-      background: #fff7ea;
-      color: var(--accent);
-      border: 1px solid #e4c89d;
-      box-shadow: 0 4px 10px rgba(122,79,42,.10);
-      font-size: .86rem;
-      font-weight: 800;
-      z-index: 2;
+      top: 14px;
+      right: 14px;
+      background: var(--save-bg);
+      color: var(--save-text);
+      border: 1px solid var(--save-border);
+      box-shadow: none;
+      padding: 8px 12px;
+      font-size: 0.86rem;
+      line-height: 1;
     }
-    .save-review-button:hover { background: #ffefd1; color: var(--accent-dark); box-shadow: 0 7px 14px rgba(122,79,42,.16); }
-    .save-review-button.saved { background: #7a4f2a; color: #fff; border-color: #7a4f2a; }
-    .save-review-button.saved:hover { background: var(--accent-dark); color: #fff; }
-        .empty, .error { background: #fff0f0; border: 1px solid #f0b9b9; color: #8a1f1f; border-radius: 16px; padding: 16px; line-height: 1.7; }
-    footer { margin-top: 28px; text-align: center; color: var(--muted); font-size: .9rem; }
-    @media (max-width: 760px) { .toolbar { grid-template-columns: 1fr 1fr; } }
-    @media (max-width: 560px) { .app { padding: 22px 12px 36px; } .toolbar { grid-template-columns: 1fr; } .actions { align-items: stretch; } button { width: 100%; } .save-review-button { position: static; width: auto; margin-bottom: 10px; } .review-row { align-items: stretch; } .card { padding: 17px; border-radius: 18px; } .card-head { align-items: flex-start; flex-direction: column; margin-right: 0; } }
-  
 
-/* Dark mode */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #11100f;
-    --card: #211d19;
-    --text: #fff7ec;
-    --muted: #d0c0ad;
-    --accent: #f0b36a;
-    --accent-dark: #d89448;
-    --line: #5a4a3a;
-    --answer-bg: #332a22;
-    --shadow: 0 12px 30px rgba(0, 0, 0, 0.48);
-  }
+    .save-review-button.saved {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
 
-  body {
-    background: radial-gradient(circle at top, #342a21 0%, var(--bg) 52%, #080807 100%);
-    color: var(--text);
-  }
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin: 8px 96px 12px 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
 
-  .description,
-  .status,
-  .base,
-  .answer-label,
-  footer,
-  .source,
-  .card-head {
-    color: var(--muted);
-  }
+    .question-number {
+      font-weight: 800;
+      color: var(--accent);
+    }
 
-  .card {
-    background: var(--card);
-    border-color: var(--line);
-    box-shadow: var(--shadow);
-  }
+    .sentence {
+      font-size: clamp(1.1rem, 2.8vw, 1.45rem);
+      line-height: 1.9;
+      margin: 0 0 6px;
+    }
 
-  .sentence {
-    color: var(--text);
-  }
+    .source {
+      text-align: right;
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin: 0 0 14px;
+    }
 
-  .target {
-    color: #fffaf2;
-    text-decoration-color: #ffd18f;
-    background: linear-gradient(transparent 58%, rgba(240, 179, 106, 0.42) 58%);
-  }
+    .target {
+      text-decoration: underline;
+      text-decoration-thickness: 0.14em;
+      text-underline-offset: 0.22em;
+      font-weight: 800;
+      background: linear-gradient(transparent 62%, rgba(196, 146, 82, 0.28) 62%);
+      border-radius: 4px;
+      padding: 0 0.08em;
+    }
 
-  .answer {
-    background: var(--answer-bg);
-    border: 1px solid #4f4032;
-    color: var(--text);
-  }
+    .answer {
+      display: none;
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: var(--answer-bg);
+      line-height: 1.7;
+    }
 
-  button {
-    background: var(--accent);
-    color: #1d130a;
-    box-shadow: 0 7px 16px rgba(240, 179, 106, 0.22);
-  }
+    .answer.visible { display: block; }
 
-  button:hover {
-    background: var(--accent-dark);
-  }
+    .answer-label {
+      display: block;
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+      font-weight: 700;
+    }
 
-  select,
-  .secondary {
-    background: #2a241e;
-    color: var(--text);
-    border-color: var(--line);
-  }
+    .base {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-top: 8px;
+    }
 
-  .save-button,
-  .review-save-button {
-    background: #3a2d22;
-    color: #ffdca8;
-    border: 1px solid #8c6741;
-    box-shadow: none;
-  }
+    .error {
+      background: #fff0f0;
+      border: 1px solid #f0b9b9;
+      color: #8a1f1f;
+      border-radius: 16px;
+      padding: 16px;
+      line-height: 1.7;
+    }
 
-  .save-button:hover,
-  .review-save-button:hover {
-    background: #4a392a;
-  }
+    footer {
+      margin-top: 28px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
 
-  .error {
-    background: #3a1f1f;
-    border-color: #a55a5a;
-    color: #ffe0e0;
-  }
-}
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #11100f;
+        --card: #211d19;
+        --text: #fff7ec;
+        --muted: #d0c0ad;
+        --accent: #f0b36a;
+        --accent-dark: #d89448;
+        --line: #5a4a3a;
+        --answer-bg: #332a22;
+        --shadow: 0 12px 30px rgba(0, 0, 0, 0.48);
+        --save-bg: #3a2d22;
+        --save-text: #ffdca8;
+        --save-border: #8c6741;
+      }
 
-/* Keep save/review button pinned to top-left on small screens */
-@media (max-width: 560px) {
-  .save-button,
-  .review-save-button,
-  .save-toggle-button,
-  .saveBtn,
-  [data-action="save"],
-  button.save {
-    align-self: flex-start;
-    margin-left: 0;
-    margin-right: auto;
-  }
+      body {
+        background: radial-gradient(circle at top, #342a21 0%, var(--bg) 52%, #080807 100%);
+      }
 
-  .card-head {
-    align-items: flex-start;
-  }
-}
+      select,
+      .secondary,
+      .danger {
+        background: #2a241e;
+        color: var(--text);
+        border-color: var(--line);
+      }
 
+      .danger {
+        color: #ffb7ad;
+      }
 
-@media (max-width: 560px) {
-  .card {
-    position: relative;
-  }
+      .target {
+        color: #fffaf2;
+        text-decoration-color: #ffd18f;
+        background: linear-gradient(transparent 58%, rgba(240, 179, 106, 0.42) 58%);
+      }
 
-  .card .save-button,
-  .card .review-save-button,
-  .card .save-toggle-button {
-    position: static;
-    width: auto;
-    align-self: flex-start;
-  }
+      .answer {
+        border: 1px solid #4f4032;
+      }
 
-  .card-head {
-    width: 100%;
-  }
-}
+      .error {
+        background: #3a1f1f;
+        border-color: #a55a5a;
+        color: #ffe0e0;
+      }
+    }
 
+    @media (max-width: 760px) {
+      .toolbar {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
 
-@media (max-width: 560px) {
-  .card {
-    position: relative;
-  }
+    @media (max-width: 560px) {
+      .app { padding: 22px 12px 36px; }
+      .toolbar { grid-template-columns: 1fr; }
+      button, select { width: 100%; }
+      .card { padding: 54px 17px 17px; border-radius: 18px; }
+      .save-review-button {
+        width: auto;
+        position: absolute;
+        top: 12px;
+        right: 12px;
+      }
+      .card-head {
+        margin: 0 0 12px;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
 
-  .card .save-button,
-  .card .review-save-button,
-  .card .save-toggle-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-  }
-}
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 14mm 12mm;
+      }
 
+      html, body {
+        background: #fff !important;
+        color: #111 !important;
+        font-family: "Yu Mincho", "Hiragino Mincho ProN", "Yu Gothic", serif !important;
+      }
 
-/* Manual theme override */
-html[data-theme="light"] {
-  color-scheme: light;
-}
+      .app {
+        width: 100% !important;
+        max-width: none !important;
+        padding: 0 !important;
+      }
 
-html[data-theme="dark"] {
-  color-scheme: dark;
-}
+      .screen-only {
+        display: none !important;
+      }
 
-html[data-theme="dark"] {
-  --bg: #11100f;
-  --card: #211d19;
-  --text: #fff7ec;
-  --muted: #d0c0ad;
-  --accent: #f0b36a;
-  --accent-dark: #d89448;
-  --line: #5a4a3a;
-  --answer-bg: #332a22;
-  --shadow: 0 12px 30px rgba(0, 0, 0, 0.48);
-}
+      .print-section {
+        display: block !important;
+      }
 
-html[data-theme="dark"] body {
-  background: radial-gradient(circle at top, #342a21 0%, var(--bg) 52%, #080807 100%);
-  color: var(--text);
-}
+      .print-page {
+        page-break-after: always;
+      }
 
-html[data-theme="dark"] .description,
-html[data-theme="dark"] .status,
-html[data-theme="dark"] .base,
-html[data-theme="dark"] .answer-label,
-html[data-theme="dark"] footer,
-html[data-theme="dark"] .source,
-html[data-theme="dark"] .card-head {
-  color: var(--muted);
-}
+      .print-page:last-child {
+        page-break-after: auto;
+      }
 
-html[data-theme="dark"] .card {
-  background: var(--card);
-  border-color: var(--line);
-  box-shadow: var(--shadow);
-}
+      .print-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        border-bottom: 2px solid #111;
+        padding-bottom: 3mm;
+        margin-bottom: 6mm;
+      }
 
-html[data-theme="dark"] .sentence {
-  color: var(--text);
-}
+      .print-title h2 {
+        margin: 0;
+        font-size: 18pt;
+        letter-spacing: 0.08em;
+      }
 
-html[data-theme="dark"] .target {
-  color: #fffaf2;
-  text-decoration-color: #ffd18f;
-  background: linear-gradient(transparent 58%, rgba(240, 179, 106, 0.42) 58%);
-}
+      .print-meta {
+        font-size: 10pt;
+      }
 
-html[data-theme="dark"] .answer {
-  background: var(--answer-bg);
-  border: 1px solid #4f4032;
-  color: var(--text);
-}
+      .print-list {
+        display: grid;
+        gap: 4mm;
+      }
 
-html[data-theme="dark"] button {
-  background: var(--accent);
-  color: #1d130a;
-  box-shadow: 0 7px 16px rgba(240, 179, 106, 0.22);
-}
+      .print-item {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        border: 1px solid #222;
+        padding: 4mm;
+        background: #fff !important;
+      }
 
-html[data-theme="dark"] button:hover {
-  background: var(--accent-dark);
-}
+      .print-question-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 8mm;
+        font-size: 10pt;
+        margin-bottom: 2mm;
+      }
 
-html[data-theme="dark"] select,
-html[data-theme="dark"] .secondary {
-  background: #2a241e;
-  color: var(--text);
-  border-color: var(--line);
-}
+      .print-qno {
+        font-weight: bold;
+      }
 
-html[data-theme="dark"] .save-button,
-html[data-theme="dark"] .review-save-button,
-html[data-theme="dark"] .save-toggle-button {
-  background: #3a2d22;
-  color: #ffdca8;
-  border: 1px solid #8c6741;
-  box-shadow: none;
-}
+      .print-source {
+        text-align: right;
+        color: #333 !important;
+      }
 
-/* Teaching-material print layout */
-@media print {
-  @page {
-    size: A4 portrait;
-    margin: 14mm 12mm;
-  }
+      .print-sentence {
+        font-size: 12.5pt;
+        line-height: 1.9;
+        margin: 0;
+      }
 
-  html, body {
-    background: #fff !important;
-    color: #111 !important;
-    font-family: "Yu Mincho", "Hiragino Mincho ProN", "Yu Gothic", serif !important;
-  }
+      .print-answer-box {
+        margin-top: 2.5mm;
+        padding-top: 2.5mm;
+        border-top: 1px dashed #555;
+        font-size: 11pt;
+        line-height: 1.7;
+      }
 
-  .app {
-    width: 100% !important;
-    max-width: none !important;
-    padding: 0 !important;
-  }
-
-  header {
-    margin-bottom: 10mm !important;
-    border-bottom: 2px solid #111;
-    padding-bottom: 4mm;
-  }
-
-  h1 {
-    font-size: 20pt !important;
-    letter-spacing: 0.08em;
-    text-align: center;
-  }
-
-  .description,
-  .toolbar,
-  .status,
-  footer,
-  button,
-  select,
-  .save-button,
-  .review-save-button,
-  .save-toggle-button {
-    display: none !important;
-  }
-
-  .print-section {
-    display: block !important;
-  }
-
-  .print-page {
-    page-break-after: always;
-  }
-
-  .print-page:last-child {
-    page-break-after: auto;
-  }
-
-  .print-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: end;
-    border-bottom: 2px solid #111;
-    padding-bottom: 3mm;
-    margin-bottom: 6mm;
-  }
-
-  .print-title h2 {
-    margin: 0;
-    font-size: 18pt;
-    letter-spacing: 0.08em;
-  }
-
-  .print-meta {
-    font-size: 10pt;
-  }
-
-  .print-list {
-    display: grid;
-    gap: 4mm;
-  }
-
-  .print-item {
-    break-inside: avoid;
-    page-break-inside: avoid;
-    border: 1px solid #222;
-    border-radius: 0;
-    padding: 4mm;
-    background: #fff !important;
-  }
-
-  .print-question-head {
-    display: flex;
-    justify-content: space-between;
-    gap: 8mm;
-    font-size: 10pt;
-    margin-bottom: 2mm;
-  }
-
-  .print-qno {
-    font-weight: bold;
-  }
-
-  .print-source {
-    text-align: right;
-    color: #333 !important;
-  }
-
-  .print-sentence {
-    font-size: 12.5pt;
-    line-height: 1.9;
-    margin: 0;
-  }
-
-  .print-answer-box {
-    margin-top: 2.5mm;
-    padding-top: 2.5mm;
-    border-top: 1px dashed #555;
-    font-size: 11pt;
-    line-height: 1.7;
-  }
-
-  .target {
-    text-decoration: underline !important;
-    text-decoration-thickness: 1.5px !important;
-    text-underline-offset: 3px !important;
-    background: transparent !important;
-    color: #111 !important;
-    font-weight: bold !important;
-  }
-
-  .quiz {
-    display: none !important;
-  }
-}
-
-</style>
+      .target {
+        text-decoration: underline !important;
+        text-decoration-thickness: 1.5px !important;
+        text-underline-offset: 3px !important;
+        background: transparent !important;
+        color: #111 !important;
+        font-weight: bold !important;
+      }
+    }
+  </style>
 </head>
 <body>
   <main class="app">
-    <header>
-      <h1>古文単語例文テスト</h1>
-      <p class="description">例文リストからランダムに出題します。下線部の意味を考えてから、「解答を見る」を押してください。</p>
-    </header>
+    <div class="screen-only">
+      <header>
+        <h1>古文単語例文テスト</h1>
+        <p class="description">例文リストからランダムに出題します。下線部の意味を考えてから、「解答を見る」を押してください。</p>
+      </header>
 
-    <section class="toolbar" aria-label="出題設定">
-      <div class="control"><label for="questionCount">出題数</label><select id="questionCount"><option value="10" selected>10問</option><option value="5">5問</option><option value="20">20問</option><option value="50">50問</option></select>
-      
-</div>
-      <div class="control"><label for="sourceFilter">出典</label><select id="sourceFilter"><option value="">すべての出典</option></select></div>
-      <div class="control"><label for="rowFilter">単語の行</label><select id="rowFilter"><option value="">すべての行</option><option value="ア行">ア行</option><option value="カ行">カ行</option><option value="サ行">サ行</option><option value="タ行">タ行</option><option value="ナ行">ナ行</option><option value="ハ行">ハ行</option><option value="マ行">マ行</option><option value="ヤ行">ヤ行</option><option value="ラ行">ラ行</option><option value="ワ行">ワ行</option><option value="その他">その他</option></select></div>
-      <button id="newQuizButton">ランダム出題</button>
-    </section>
+      <section class="toolbar" aria-label="出題設定">
+        <div class="control">
+          <label for="questionCount">出題数</label>
+          <select id="questionCount" aria-label="出題数">
+            <option value="10" selected>10問</option>
+            <option value="5">5問</option>
+            <option value="20">20問</option>
+          </select>
+        </div>
 
-    <section class="actions" aria-label="操作">
-      <button id="showAllButton" class="secondary">すべて解答表示</button>
-      <button id="hideAllButton" class="secondary">すべて隠す</button>
-      <button id="resetFilterButton" class="secondary">フィルタ解除</button>
-      <button id="printCombinedPdfButton" class="print-button" title="問題と解答を2ページ構成で印刷します"><span aria-hidden="true">🖨️</span> 🖨️ 印刷（問題＋解答）</button>
-      <button id="reviewModeButton" class="secondary">復習用に保存した問題を出題</button>
-      <button id="clearSavedButton" class="danger">保存済みを全削除</button>
-    </section>
+        <div class="control">
+          <label for="sourceFilter">出典</label>
+          <select id="sourceFilter" aria-label="出典で絞り込み">
+            <option value="">すべての出典</option>
+          </select>
+        </div>
 
-    <div id="status" class="status">読み込み中...</div>
-    <section id="quiz" class="quiz" aria-live="polite"></section>
+        <div class="control">
+          <label for="rowFilter">単語の行</label>
+          <select id="rowFilter" aria-label="単語の行で絞り込み">
+            <option value="">すべての行</option>
+            <option value="ア行">ア行</option>
+            <option value="カ行">カ行</option>
+            <option value="サ行">サ行</option>
+            <option value="タ行">タ行</option>
+            <option value="ナ行">ナ行</option>
+            <option value="ハ行">ハ行</option>
+            <option value="マ行">マ行</option>
+            <option value="ヤ行">ヤ行</option>
+            <option value="ラ行">ラ行</option>
+            <option value="ワ行">ワ行</option>
+          </select>
+        </div>
+
+        <button id="newQuizButton">ランダム出題</button>
+        <button id="showAllButton" class="secondary">すべて解答表示</button>
+        <button id="hideAllButton" class="secondary">すべて隠す</button>
+        <button id="resetFilterButton" class="secondary">フィルタ解除</button>
+        <button id="reviewModeButton" class="secondary">保存済みを出題</button>
+        <button id="clearSavedButton" class="danger">保存済みを削除</button>
+        <button id="printButton" class="print-button">🖨️ 印刷（問題＋解答）</button>
+      </section>
+
+      <div id="status" class="status">読み込み中...</div>
+      <section id="quiz" class="quiz" aria-live="polite"></section>
+
+      <footer>採点なし・解答確認用</footer>
+    </div>
+
     <section id="printSection" class="print-section" aria-hidden="true" style="display:none;"></section>
-    <footer>採点なし・解答確認用</footer>
   </main>
 
   <script>
-    const DATA_URL = "kobun_app_data_inflected_updated.json";
-    const STORAGE_KEY = "kobunReviewQuestionsV1";
+    const DATA_URLS = [
+      "kobun_app_data_inflected_updated_target_fixed.json",
+      "kobun_app_data_inflected_updated.json"
+    ];
+    const STORAGE_KEY = "kobunReviewQuestions";
+
     let allQuestions = [];
     let currentQuestions = [];
     let reviewMode = false;
@@ -485,490 +504,334 @@ html[data-theme="dark"] .save-toggle-button {
     const sourceFilterEl = document.getElementById("sourceFilter");
     const rowFilterEl = document.getElementById("rowFilter");
 
-    const rowMap = {"あ":"ア行","い":"ア行","う":"ア行","え":"ア行","お":"ア行","か":"カ行","き":"カ行","く":"カ行","け":"カ行","こ":"カ行","が":"カ行","ぎ":"カ行","ぐ":"カ行","げ":"カ行","ご":"カ行","さ":"サ行","し":"サ行","す":"サ行","せ":"サ行","そ":"サ行","ざ":"サ行","じ":"サ行","ず":"サ行","ぜ":"サ行","ぞ":"サ行","た":"タ行","ち":"タ行","つ":"タ行","て":"タ行","と":"タ行","だ":"タ行","ぢ":"タ行","づ":"タ行","で":"タ行","ど":"タ行","な":"ナ行","に":"ナ行","ぬ":"ナ行","ね":"ナ行","の":"ナ行","は":"ハ行","ひ":"ハ行","ふ":"ハ行","へ":"ハ行","ほ":"ハ行","ば":"ハ行","び":"ハ行","ぶ":"ハ行","べ":"ハ行","ぼ":"ハ行","ぱ":"ハ行","ぴ":"ハ行","ぷ":"ハ行","ぺ":"ハ行","ぽ":"ハ行","ま":"マ行","み":"マ行","む":"マ行","め":"マ行","も":"マ行","や":"ヤ行","ゆ":"ヤ行","よ":"ヤ行","ら":"ラ行","り":"ラ行","る":"ラ行","れ":"ラ行","ろ":"ラ行","わ":"ワ行","ゐ":"ワ行","ゑ":"ワ行","を":"ワ行","ん":"ワ行"};
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
 
-    function escapeHtml(value) { return String(value ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;"); }
-    function escapeRegExp(value) { return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
-    function normalizeKana(value) { return String(value ?? "").trim().replace(/[ァ-ン]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0x60)); }
-    function getBaseRow(base) { return rowMap[normalizeKana(base).charAt(0)] || "その他"; }
-    function getQuestionKey(q) { return [q.number ?? "", q.sentence ?? "", q.base ?? "", q.answer ?? ""].join("::"); }
-    function readSavedMap() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); } catch { return {}; } }
-    function writeSavedMap(savedMap) { localStorage.setItem(STORAGE_KEY, JSON.stringify(savedMap)); }
-    function getSavedEntries() { return Object.values(readSavedMap()); }
-    function getSavedQuestions() { const savedMap = readSavedMap(); return allQuestions.filter(q => savedMap[getQuestionKey(q)]); }
+    function escapeRegExp(value) {
+      return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
 
     function renderSentence(sentence, target) {
       const safeSentence = escapeHtml(sentence);
+      if (!target || !String(sentence).includes(String(target))) {
+        return safeSentence;
+      }
       const safeTarget = escapeHtml(target);
-      if (!target || !String(sentence).includes(String(target))) return safeSentence;
-      return safeSentence.replace(new RegExp(escapeRegExp(safeTarget), "g"), `<span class="target">${safeTarget}</span>`);
+      const pattern = new RegExp(escapeRegExp(safeTarget), "g");
+      return safeSentence.replace(pattern, `<span class="target">${safeTarget}</span>`);
     }
 
-    function shuffle(array) { const copied = [...array]; for (let i = copied.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [copied[i], copied[j]] = [copied[j], copied[i]]; } return copied; }
-    function getFilteredQuestions() { const source = sourceFilterEl.value; const row = rowFilterEl.value; return allQuestions.filter(q => (!source || String(q.source ?? "") === source) && (!row || getBaseRow(q.base) === row)); }
+    function shuffle(array) {
+      const copied = [...array];
+      for (let i = copied.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copied[i], copied[j]] = [copied[j], copied[i]];
+      }
+      return copied;
+    }
 
-    function createQuiz() { reviewMode = false; const filtered = getFilteredQuestions(); const count = Number(questionCountEl.value); currentQuestions = shuffle(filtered).slice(0, Math.min(count, filtered.length)); renderQuiz(filtered.length); }
-    function createReviewQuiz() { reviewMode = true; const savedQuestions = getSavedQuestions(); const count = Number(questionCountEl.value); currentQuestions = shuffle(savedQuestions).slice(0, Math.min(count, savedQuestions.length)); renderQuiz(savedQuestions.length); }
+    function getQuestionId(q) {
+      return `${q.sentence || ""}__${q.target || ""}__${q.answer || ""}`;
+    }
 
-    function renderQuiz(filteredCount) {
+    function loadSavedQuestions() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+      } catch {
+        return [];
+      }
+    }
+
+    function saveSavedQuestions(saved) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+    }
+
+    function isQuestionSaved(q) {
+      const id = getQuestionId(q);
+      return loadSavedQuestions().some(item => getQuestionId(item) === id);
+    }
+
+    function toggleSaveQuestion(index) {
+      const q = currentQuestions[index];
+      if (!q) return;
+
+      const id = getQuestionId(q);
+      let saved = loadSavedQuestions();
+      const exists = saved.some(item => getQuestionId(item) === id);
+
+      if (exists) {
+        saved = saved.filter(item => getQuestionId(item) !== id);
+      } else {
+        saved.push(q);
+      }
+
+      saveSavedQuestions(saved);
+      renderQuiz(getCandidateQuestions().length);
+    }
+
+    function getRowLabel(text) {
+      const first = String(text || "").trim().charAt(0);
+      const map = {
+        "あ": "ア行", "い": "ア行", "う": "ア行", "え": "ア行", "お": "ア行",
+        "か": "カ行", "き": "カ行", "く": "カ行", "け": "カ行", "こ": "カ行", "が": "カ行", "ぎ": "カ行", "ぐ": "カ行", "げ": "カ行", "ご": "カ行",
+        "さ": "サ行", "し": "サ行", "す": "サ行", "せ": "サ行", "そ": "サ行", "ざ": "サ行", "じ": "サ行", "ず": "サ行", "ぜ": "サ行", "ぞ": "サ行",
+        "た": "タ行", "ち": "タ行", "つ": "タ行", "て": "タ行", "と": "タ行", "だ": "タ行", "ぢ": "タ行", "づ": "タ行", "で": "タ行", "ど": "タ行",
+        "な": "ナ行", "に": "ナ行", "ぬ": "ナ行", "ね": "ナ行", "の": "ナ行",
+        "は": "ハ行", "ひ": "ハ行", "ふ": "ハ行", "へ": "ハ行", "ほ": "ハ行", "ば": "ハ行", "び": "ハ行", "ぶ": "ハ行", "べ": "ハ行", "ぼ": "ハ行", "ぱ": "ハ行", "ぴ": "ハ行", "ぷ": "ハ行", "ぺ": "ハ行", "ぽ": "ハ行",
+        "ま": "マ行", "み": "マ行", "む": "マ行", "め": "マ行", "も": "マ行",
+        "や": "ヤ行", "ゆ": "ヤ行", "よ": "ヤ行",
+        "ら": "ラ行", "り": "ラ行", "る": "ラ行", "れ": "ラ行", "ろ": "ラ行",
+        "わ": "ワ行", "ゐ": "ワ行", "ゑ": "ワ行", "を": "ワ行", "ん": "ワ行"
+      };
+      return map[first] || "";
+    }
+
+    function populateSourceFilter() {
+      const sources = [...new Set(allQuestions.map(q => q.source).filter(Boolean))].sort();
+      sourceFilterEl.innerHTML = `<option value="">すべての出典</option>`;
+      sources.forEach(source => {
+        const option = document.createElement("option");
+        option.value = source;
+        option.textContent = source;
+        sourceFilterEl.appendChild(option);
+      });
+    }
+
+    function getFilteredQuestions() {
+      const source = sourceFilterEl.value;
+      const row = rowFilterEl.value;
+
+      return allQuestions.filter(q => {
+        const matchSource = !source || q.source === source;
+        const matchRow = !row || getRowLabel(q.base) === row;
+        return matchSource && matchRow;
+      });
+    }
+
+    function getCandidateQuestions() {
+      return reviewMode ? loadSavedQuestions() : getFilteredQuestions();
+    }
+
+    function createQuiz() {
+      reviewMode = false;
+      const candidates = getFilteredQuestions();
+      const count = Number(questionCountEl.value);
+      currentQuestions = shuffle(candidates).slice(0, Math.min(count, candidates.length));
+      renderQuiz(candidates.length);
+    }
+
+    function createReviewQuiz() {
+      reviewMode = true;
+      const candidates = loadSavedQuestions();
+      const count = Number(questionCountEl.value);
+      currentQuestions = shuffle(candidates).slice(0, Math.min(count, candidates.length));
+      renderQuiz(candidates.length);
+    }
+
+    function renderQuiz(candidateCount) {
       quizEl.innerHTML = "";
-      if (currentQuestions.length === 0) {
-        if (reviewMode) { statusEl.textContent = "保存済み問題は0件です"; quizEl.innerHTML = `<div class="empty">保存済み問題がありません。各問題右上の「復習用に保存」から追加してください。</div>`; }
-        else { statusEl.textContent = `${allQuestions.length}件中、条件に合う問題は0件です`; quizEl.innerHTML = `<div class="empty">条件に合う問題がありません。フィルタを変更してください。</div>`; }
+
+      if (!currentQuestions.length) {
+        quizEl.innerHTML = `<div class="error">表示できる問題がありません。条件を変更してください。</div>`;
+        statusEl.textContent = `該当 ${candidateCount ?? 0}件`;
+        buildPrintSection();
         return;
       }
-      const savedMap = readSavedMap();
+
       currentQuestions.forEach((q, index) => {
         const card = document.createElement("article");
         card.className = "card";
+
         const number = q.number ? `No. ${escapeHtml(q.number)}` : "";
         const sentenceHtml = renderSentence(q.sentence, q.target);
-        const sourceText = q.source ? `出典：${escapeHtml(q.source)}` : "出典：未設定";
-        const baseText = q.base ? `<div class="base">原形：${escapeHtml(q.base)}</div>` : "";
-        const saved = savedMap[getQuestionKey(q)];
+        const baseText = q.base ? `<div class="base">単語：${escapeHtml(q.base)}</div>` : "";
+        const sourceText = q.source ? `出典：${escapeHtml(q.source)}` : "";
+        const saved = isQuestionSaved(q);
+
         card.innerHTML = `
-          <button type="button" class="save-review-button${saved ? " saved" : ""}" data-index="${index}">${saved ? "★ 保存解除" : "☆ 復習用に保存"}</button>
-          <div class="card-head"><span class="question-number">Q${index + 1}</span><span>${number}</span></div>
+          <button type="button" class="save-review-button ${saved ? "saved" : ""}" data-index="${index}">
+            ${saved ? "★ 保存解除" : "☆ 復習用に保存"}
+          </button>
+          <div class="card-head">
+            <span class="question-number">Q${index + 1}</span>
+            <span>${number}</span>
+          </div>
           <p class="sentence">${sentenceHtml}</p>
           <div class="source">${sourceText}</div>
           <button type="button" class="answer-button" data-index="${index}">解答を見る</button>
-          <div class="answer" id="answer-${index}"><span class="answer-label">模範解答</span><div>${escapeHtml(q.answer)}</div>${baseText}</div>`;
+          <div class="answer" id="answer-${index}">
+            <span class="answer-label">模範解答</span>
+            <div>${escapeHtml(q.answer)}</div>
+            ${baseText}
+          </div>
+        `;
         quizEl.appendChild(card);
       });
-      const savedCount = getSavedEntries().length;
-      if (reviewMode) { statusEl.textContent = `保存済み${savedCount}件中、${filteredCount}件から${currentQuestions.length}問を表示中`; }
-      else { statusEl.textContent = `${allQuestions.length}件中、条件に合う${filteredCount}件から${currentQuestions.length}問を表示中｜保存済み${savedCount}件`; }
+
+      const savedCount = loadSavedQuestions().length;
+      statusEl.textContent = reviewMode
+        ? `保存済み ${candidateCount}件から${currentQuestions.length}問を表示中`
+        : `該当 ${candidateCount}件から${currentQuestions.length}問を表示中 ／ 保存済み ${savedCount}件`;
+
+      buildPrintSection();
     }
 
-    function toggleAnswer(index) { const answerEl = document.getElementById(`answer-${index}`); const button = document.querySelector(`.answer-button[data-index="${index}"]`); const visible = answerEl.classList.toggle("visible"); button.textContent = visible ? "解答を隠す" : "解答を見る"; }
-    function setAllAnswers(visible) { currentQuestions.forEach((_, index) => { const answerEl = document.getElementById(`answer-${index}`); const button = document.querySelector(`.answer-button[data-index="${index}"]`); if (!answerEl || !button) return; answerEl.classList.toggle("visible", visible); button.textContent = visible ? "解答を隠す" : "解答を見る"; }); }
+    function toggleAnswer(index) {
+      const answerEl = document.getElementById(`answer-${index}`);
+      const button = document.querySelector(`.answer-button[data-index="${index}"]`);
+      if (!answerEl || !button) return;
+      const visible = answerEl.classList.toggle("visible");
+      button.textContent = visible ? "解答を隠す" : "解答を見る";
+    }
 
-    function saveQuestionForReview(index) {
-      const q = currentQuestions[index];
-      if (!q) return;
-      const key = getQuestionKey(q);
-      const savedMap = readSavedMap();
+    function setAllAnswers(visible) {
+      currentQuestions.forEach((_, index) => {
+        const answerEl = document.getElementById(`answer-${index}`);
+        const button = document.querySelector(`.answer-button[data-index="${index}"]`);
+        if (!answerEl || !button) return;
+        answerEl.classList.toggle("visible", visible);
+        button.textContent = visible ? "解答を隠す" : "解答を見る";
+      });
+    }
 
-      if (savedMap[key]) {
-        delete savedMap[key];
-        writeSavedMap(savedMap);
-        if (reviewMode) createReviewQuiz();
-        else renderQuiz(getFilteredQuestions().length);
+    function resetFilters() {
+      sourceFilterEl.value = "";
+      rowFilterEl.value = "";
+      createQuiz();
+    }
+
+    function clearSavedQuestions() {
+      if (!confirm("保存済み問題をすべて削除しますか？")) return;
+      localStorage.removeItem(STORAGE_KEY);
+      if (reviewMode) createReviewQuiz();
+      else renderQuiz(getFilteredQuestions().length);
+    }
+
+    function buildPrintSection() {
+      const printSection = document.getElementById("printSection");
+      if (!printSection) return;
+
+      const now = new Date();
+      const dateText = `${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日`;
+      const questions = currentQuestions || [];
+
+      const questionItems = questions.map((q, i) => `
+        <article class="print-item">
+          <div class="print-question-head">
+            <span class="print-qno">問${i + 1}</span>
+            <span class="print-source">出典：${escapeHtml(q.source || "")}</span>
+          </div>
+          <p class="print-sentence">${renderSentence(q.sentence, q.target)}</p>
+        </article>
+      `).join("");
+
+      const answerItems = questions.map((q, i) => `
+        <article class="print-item">
+          <div class="print-question-head">
+            <span class="print-qno">問${i + 1}</span>
+            <span class="print-source">出典：${escapeHtml(q.source || "")}</span>
+          </div>
+          <p class="print-sentence">${renderSentence(q.sentence, q.target)}</p>
+          <div class="print-answer-box">
+            <strong>解答：</strong>${escapeHtml(q.answer || "")}
+            ${q.base ? `<br><strong>単語：</strong>${escapeHtml(q.base)}` : ""}
+          </div>
+        </article>
+      `).join("");
+
+      printSection.innerHTML = `
+        <div class="print-page">
+          <div class="print-title">
+            <h2>古文単語例文テスト　問題</h2>
+            <div class="print-meta">氏名：＿＿＿＿＿＿＿＿　日付：${dateText}</div>
+          </div>
+          <div class="print-list">${questionItems}</div>
+        </div>
+        <div class="print-page">
+          <div class="print-title">
+            <h2>古文単語例文テスト　解答</h2>
+            <div class="print-meta">日付：${dateText}</div>
+          </div>
+          <div class="print-list">${answerItems}</div>
+        </div>
+      `;
+    }
+
+    async function fetchData() {
+      let lastError = null;
+
+      for (const url of DATA_URLS) {
+        try {
+          const response = await fetch(url);
+          if (!response.ok) throw new Error(`${url}: HTTP ${response.status}`);
+          return await response.json();
+        } catch (error) {
+          lastError = error;
+        }
+      }
+
+      throw lastError || new Error("データを読み込めませんでした。");
+    }
+
+    async function loadData() {
+      try {
+        allQuestions = await fetchData();
+        allQuestions = allQuestions
+          .filter(q => q && q.sentence && q.answer)
+          .map((q, index) => ({ number: q.number || q.番号 || index + 1, ...q }));
+
+        populateSourceFilter();
+        createQuiz();
+      } catch (error) {
+        statusEl.textContent = "";
+        quizEl.innerHTML = `
+          <div class="error">
+            <strong>データを読み込めませんでした。</strong><br>
+            公開時は index.html と kobun_app_data_inflected_updated_target_fixed.json を同じフォルダに置いてください。<br>
+            旧ファイル名の場合は kobun_app_data_inflected_updated.json でも読み込みを試します。<br>
+            ローカルで直接HTMLを開く場合は、ブラウザの制限でJSONを読み込めないことがあります。
+          </div>
+        `;
+        console.error(error);
+      }
+    }
+
+    quizEl.addEventListener("click", (event) => {
+      const answerButton = event.target.closest(".answer-button");
+      if (answerButton) {
+        toggleAnswer(Number(answerButton.dataset.index));
         return;
       }
 
-      savedMap[key] = { key, savedAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
-      writeSavedMap(savedMap);
-      renderQuiz(reviewMode ? getSavedQuestions().length : getFilteredQuestions().length);
-    }
-
-    function populateSourceFilter() { const sources = [...new Set(allQuestions.map(q => String(q.source ?? "").trim()).filter(Boolean))].sort((a,b) => a.localeCompare(b, "ja")); sources.forEach(source => { const option = document.createElement("option"); option.value = source; option.textContent = source; sourceFilterEl.appendChild(option); }); }
-
-    function buildPrintableHtml() {
-      const selectedSourceText = reviewMode ? "保存済み問題" : (sourceFilterEl.value || "すべての出典");
-      const selectedRowText = reviewMode ? "復習用に保存" : (rowFilterEl.value || "すべての行");
-      const meta = "出題条件：" + escapeHtml(selectedSourceText) + "　｜　" + escapeHtml(selectedRowText) + "　｜　" + currentQuestions.length + "問";
-      const problemCards = currentQuestions.map((q, index) => { const sentenceHtml = renderSentence(q.sentence, q.target); const sourceText = q.source ? "出典：" + escapeHtml(q.source) : "出典：未設定"; return `<article class="print-card"><div class="print-head">Q${index + 1}</div><p class="print-sentence">${sentenceHtml}</p><div class="print-source">${sourceText}</div></article>`; }).join("");
-      const answerCards = currentQuestions.map((q, index) => { const sentenceHtml = renderSentence(q.sentence, q.target); const sourceText = q.source ? "出典：" + escapeHtml(q.source) : "出典：未設定"; const baseHtml = q.base ? `<div class="print-base">原形：${escapeHtml(q.base)}</div>` : ""; return `<article class="print-card"><div class="print-head">Q${index + 1}</div><p class="print-sentence">${sentenceHtml}</p><div class="print-source">${sourceText}</div><div class="print-answer"><span class="print-label">模範解答</span><div>${escapeHtml(q.answer)}</div>${baseHtml}</div></article>`; }).join("");
-      return `<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><title>古文単語例文テスト</title><style>@page{size:A4 portrait;margin:12mm 13mm}*{box-sizing:border-box}body{font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho",serif;color:#222;margin:0;line-height:1.65;font-size:12.5pt}h1{text-align:center;margin:0 0 4mm;font-size:18pt;letter-spacing:.08em}.print-meta{text-align:center;color:#666;font-size:9.5pt;margin-bottom:5mm}.print-section{break-after:page;page-break-after:always}.print-section:last-child{break-after:auto;page-break-after:auto}.print-card{break-inside:avoid;page-break-inside:avoid;border-bottom:1px solid #d8d0c5;padding:3.2mm 0 3.6mm}.print-head{font-weight:bold;color:#7a4f2a;margin-bottom:1mm;font-size:11pt}.print-sentence{font-size:13pt;margin:0 0 1mm;line-height:1.8}.target{text-decoration:underline;text-decoration-thickness:.11em;text-underline-offset:.2em;font-weight:bold}.print-source{text-align:right;color:#666;font-size:9.5pt;margin:0 0 1mm}.print-answer{margin-top:2mm;padding:2.2mm 3mm;background:#f6f0e8;border:1px solid #e3d8c8;border-radius:3mm;font-size:11.5pt}.print-label{display:block;font-weight:bold;color:#666;font-size:9.5pt;margin-bottom:1mm}.print-base{color:#666;font-size:9.5pt;margin-top:1mm}.print-footer{position:fixed;bottom:5mm;left:13mm;right:13mm;text-align:center;color:#999;font-size:8.5pt}@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
-/* Dark mode */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #181614;
-    --card: #24211d;
-    --text: #f3eadf;
-    --muted: #b8aa98;
-    --accent: #d09a5b;
-    --accent-dark: #b77f3c;
-    --line: #3a332b;
-    --answer-bg: #302a23;
-    --shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
-  }
-
-  body {
-    background: radial-gradient(circle at top, #2a241e 0%, var(--bg) 50%, #11100f 100%);
-    color: var(--text);
-  }
-
-  select,
-  .secondary {
-    background: #24211d;
-    color: var(--text);
-    border-color: var(--line);
-  }
-
-  .card {
-    background: var(--card);
-    border-color: var(--line);
-  }
-
-  .answer {
-    background: var(--answer-bg);
-  }
-
-  .error {
-    background: #3a1f1f;
-    border-color: #7d3a3a;
-    color: #ffd5d5;
-  }
-}
-
-
-@media (max-width: 560px) {
-  .card {
-    position: relative;
-  }
-
-  .card .save-button,
-  .card .review-save-button,
-  .card .save-toggle-button {
-    position: static;
-    width: auto;
-    align-self: flex-start;
-  }
-
-  .card-head {
-    width: 100%;
-  }
-}
-
-
-@media (max-width: 560px) {
-  .card {
-    position: relative;
-  }
-
-  .card .save-button,
-  .card .review-save-button,
-  .card .save-toggle-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-  }
-}
-
-
-/* Manual theme override */
-html[data-theme="light"] {
-  color-scheme: light;
-}
-
-html[data-theme="dark"] {
-  color-scheme: dark;
-}
-
-html[data-theme="dark"] {
-  --bg: #11100f;
-  --card: #211d19;
-  --text: #fff7ec;
-  --muted: #d0c0ad;
-  --accent: #f0b36a;
-  --accent-dark: #d89448;
-  --line: #5a4a3a;
-  --answer-bg: #332a22;
-  --shadow: 0 12px 30px rgba(0, 0, 0, 0.48);
-}
-
-html[data-theme="dark"] body {
-  background: radial-gradient(circle at top, #342a21 0%, var(--bg) 52%, #080807 100%);
-  color: var(--text);
-}
-
-html[data-theme="dark"] .description,
-html[data-theme="dark"] .status,
-html[data-theme="dark"] .base,
-html[data-theme="dark"] .answer-label,
-html[data-theme="dark"] footer,
-html[data-theme="dark"] .source,
-html[data-theme="dark"] .card-head {
-  color: var(--muted);
-}
-
-html[data-theme="dark"] .card {
-  background: var(--card);
-  border-color: var(--line);
-  box-shadow: var(--shadow);
-}
-
-html[data-theme="dark"] .sentence {
-  color: var(--text);
-}
-
-html[data-theme="dark"] .target {
-  color: #fffaf2;
-  text-decoration-color: #ffd18f;
-  background: linear-gradient(transparent 58%, rgba(240, 179, 106, 0.42) 58%);
-}
-
-html[data-theme="dark"] .answer {
-  background: var(--answer-bg);
-  border: 1px solid #4f4032;
-  color: var(--text);
-}
-
-html[data-theme="dark"] button {
-  background: var(--accent);
-  color: #1d130a;
-  box-shadow: 0 7px 16px rgba(240, 179, 106, 0.22);
-}
-
-html[data-theme="dark"] button:hover {
-  background: var(--accent-dark);
-}
-
-html[data-theme="dark"] select,
-html[data-theme="dark"] .secondary {
-  background: #2a241e;
-  color: var(--text);
-  border-color: var(--line);
-}
-
-html[data-theme="dark"] .save-button,
-html[data-theme="dark"] .review-save-button,
-html[data-theme="dark"] .save-toggle-button {
-  background: #3a2d22;
-  color: #ffdca8;
-  border: 1px solid #8c6741;
-  box-shadow: none;
-}
-
-/* Teaching-material print layout */
-@media print {
-  @page {
-    size: A4 portrait;
-    margin: 14mm 12mm;
-  }
-
-  html, body {
-    background: #fff !important;
-    color: #111 !important;
-    font-family: "Yu Mincho", "Hiragino Mincho ProN", "Yu Gothic", serif !important;
-  }
-
-  .app {
-    width: 100% !important;
-    max-width: none !important;
-    padding: 0 !important;
-  }
-
-  header {
-    margin-bottom: 10mm !important;
-    border-bottom: 2px solid #111;
-    padding-bottom: 4mm;
-  }
-
-  h1 {
-    font-size: 20pt !important;
-    letter-spacing: 0.08em;
-    text-align: center;
-  }
-
-  .description,
-  .toolbar,
-  .status,
-  footer,
-  button,
-  select,
-  .save-button,
-  .review-save-button,
-  .save-toggle-button {
-    display: none !important;
-  }
-
-  .print-section {
-    display: block !important;
-  }
-
-  .print-page {
-    page-break-after: always;
-  }
-
-  .print-page:last-child {
-    page-break-after: auto;
-  }
-
-  .print-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: end;
-    border-bottom: 2px solid #111;
-    padding-bottom: 3mm;
-    margin-bottom: 6mm;
-  }
-
-  .print-title h2 {
-    margin: 0;
-    font-size: 18pt;
-    letter-spacing: 0.08em;
-  }
-
-  .print-meta {
-    font-size: 10pt;
-  }
-
-  .print-list {
-    display: grid;
-    gap: 4mm;
-  }
-
-  .print-item {
-    break-inside: avoid;
-    page-break-inside: avoid;
-    border: 1px solid #222;
-    border-radius: 0;
-    padding: 4mm;
-    background: #fff !important;
-  }
-
-  .print-question-head {
-    display: flex;
-    justify-content: space-between;
-    gap: 8mm;
-    font-size: 10pt;
-    margin-bottom: 2mm;
-  }
-
-  .print-qno {
-    font-weight: bold;
-  }
-
-  .print-source {
-    text-align: right;
-    color: #333 !important;
-  }
-
-  .print-sentence {
-    font-size: 12.5pt;
-    line-height: 1.9;
-    margin: 0;
-  }
-
-  .print-answer-box {
-    margin-top: 2.5mm;
-    padding-top: 2.5mm;
-    border-top: 1px dashed #555;
-    font-size: 11pt;
-    line-height: 1.7;
-  }
-
-  .target {
-    text-decoration: underline !important;
-    text-decoration-thickness: 1.5px !important;
-    text-underline-offset: 3px !important;
-    background: transparent !important;
-    color: #111 !important;
-    font-weight: bold !important;
-  }
-
-  .quiz {
-    display: none !important;
-  }
-}
-
-</style></head><body><section class="print-section"><h1>古文単語例文テスト 問題</h1><div class="print-meta">${meta}</div>${problemCards}<div class="print-footer">問題</div></section><section class="print-section"><h1>古文単語例文テスト 解答</h1><div class="print-meta">${meta}</div>${answerCards}<div class="print-footer">解答</div></section><script>window.addEventListener("load",function(){window.print();});<\/script></body></html>`;
-    }
-
-    function exportPdf() { if (!currentQuestions.length) return; const printWindow = window.open("", "_blank"); if (!printWindow) { alert("印刷用の別ウィンドウを開けませんでした。ポップアップブロックを解除してください。"); return; } printWindow.document.open(); printWindow.document.write(buildPrintableHtml()); printWindow.document.close(); }
-    function resetFilters() { sourceFilterEl.value = ""; rowFilterEl.value = ""; createQuiz(); }
-    function clearSavedQuestions() { if (!confirm("保存済み問題をすべて削除しますか？")) return; localStorage.removeItem(STORAGE_KEY); if (reviewMode) createReviewQuiz(); else renderQuiz(getFilteredQuestions().length); }
-
-    quizEl.addEventListener("click", event => {
-      const answerButton = event.target.closest(".answer-button");
-      if (answerButton) { toggleAnswer(Number(answerButton.dataset.index)); return; }
       const saveButton = event.target.closest(".save-review-button");
-      if (saveButton) { saveQuestionForReview(Number(saveButton.dataset.index)); return; }
+      if (saveButton) {
+        toggleSaveQuestion(Number(saveButton.dataset.index));
+      }
     });
 
     document.getElementById("newQuizButton").addEventListener("click", createQuiz);
     document.getElementById("showAllButton").addEventListener("click", () => setAllAnswers(true));
     document.getElementById("hideAllButton").addEventListener("click", () => setAllAnswers(false));
     document.getElementById("resetFilterButton").addEventListener("click", resetFilters);
-    document.getElementById("printCombinedPdfButton").addEventListener("click", exportPdf);
     document.getElementById("reviewModeButton").addEventListener("click", createReviewQuiz);
     document.getElementById("clearSavedButton").addEventListener("click", clearSavedQuestions);
+    document.getElementById("printButton").addEventListener("click", () => {
+      buildPrintSection();
+      window.print();
+    });
+
     questionCountEl.addEventListener("change", () => reviewMode ? createReviewQuiz() : createQuiz());
     sourceFilterEl.addEventListener("change", createQuiz);
     rowFilterEl.addEventListener("change", createQuiz);
-    async function loadData() {
-      try {
-        const response = await fetch(DATA_URL);
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        allQuestions = await response.json();
-        allQuestions = allQuestions.filter(q => q && q.sentence && q.answer);
-        populateSourceFilter();
-        createQuiz();
-      } catch (error) {
-        statusEl.textContent = "";
-        quizEl.innerHTML = `<div class="error"><strong>データを読み込めませんでした。</strong><br>公開時は index.html と kobun_app_data_inflected_updated.json を同じフォルダに置いてください。<br>ローカルで直接HTMLを開く場合は、ブラウザの制限でJSONを読み込めないことがあります。</div>`;
-        console.error(error);
-      }
-    }
+    window.addEventListener("beforeprint", buildPrintSection);
+
     loadData();
-  
-}
-
-// Teaching-style print pages
-function buildPrintSection() {
-  const printSection = document.getElementById("printSection");
-  if (!printSection) return;
-
-  const now = new Date();
-  const dateText = `${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日`;
-  const questions = currentQuestions || [];
-
-  const questionItems = questions.map((q, i) => `
-    <article class="print-item">
-      <div class="print-question-head">
-        <span class="print-qno">問${i + 1}</span>
-        <span class="print-source">出典：${escapeHtml(q.source || "")}</span>
-      </div>
-      <p class="print-sentence">${renderSentence(q.sentence, q.target)}</p>
-    </article>
-  `).join("");
-
-  const answerItems = questions.map((q, i) => `
-    <article class="print-item">
-      <div class="print-question-head">
-        <span class="print-qno">問${i + 1}</span>
-        <span class="print-source">出典：${escapeHtml(q.source || "")}</span>
-      </div>
-      <p class="print-sentence">${renderSentence(q.sentence, q.target)}</p>
-      <div class="print-answer-box">
-        <strong>解答：</strong>${escapeHtml(q.answer || "")}
-        ${q.base ? `<br><strong>単語：</strong>${escapeHtml(q.base)}` : ""}
-      </div>
-    </article>
-  `).join("");
-
-  printSection.innerHTML = `
-    <div class="print-page">
-      <div class="print-title">
-        <h2>古文単語例文テスト　問題</h2>
-        <div class="print-meta">氏名：＿＿＿＿＿＿＿＿　日付：${dateText}</div>
-      </div>
-      <div class="print-list">${questionItems}</div>
-    </div>
-    <div class="print-page">
-      <div class="print-title">
-        <h2>古文単語例文テスト　解答</h2>
-        <div class="print-meta">日付：${dateText}</div>
-      </div>
-      <div class="print-list">${answerItems}</div>
-    </div>
-  `;
-}
-
-const existingPrintButton = document.getElementById("printButton");
-if (existingPrintButton) {
-  existingPrintButton.textContent = "🖨️ 印刷（問題＋解答）";
-  existingPrintButton.addEventListener("click", () => {
-    buildPrintSection();
-    window.print();
-  });
-}
-
-window.addEventListener("beforeprint", buildPrintSection);
-
-</script>
+  </script>
 </body>
 </html>
