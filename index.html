@@ -254,7 +254,7 @@
   </main>
 
   <script>
-    const DATA_URL = "kobun_app_data_inflected_updated.json";
+    const DATA_URL = "kobun_app_data_numbered.json";
     const STORAGE_KEY = "kobunReviewQuestionsV1";
     let allQuestions = [];
     let currentQuestions = [];
@@ -311,7 +311,7 @@
           <button type="button" class="save-review-button${saved ? " saved" : ""}" data-index="${index}">${saved ? "★ 保存解除" : "☆ 復習用に保存"}</button>
           <div class="card-head">
   <span class="question-number">Q${index + 1}</span>
-  <span class="source-inline">${number ? "No. " + number : ""}</span></div>
+  <span class="source-inline">${number}</span></div>
           <p class="sentence">${sentenceHtml}</p>
           <div class="source">${sourceText}</div>
           <button type="button" class="answer-button" data-index="${index}">解答を見る</button>
@@ -360,7 +360,7 @@
         return `
           <article class="print-card">
             <div class="print-head">
-              <span class="print-qno">問${index + 1}</span>
+              <span class="print-qno">問${index + 1}<span class="print-number">　No. ${escapeHtml(q.number || "")}</span></span>
               <span class="print-source">${sourceText}</span>
             </div>
             <p class="print-sentence">${sentenceHtml}</p>
@@ -375,7 +375,7 @@
         return `
           <article class="print-card">
             <div class="print-head">
-              <span class="print-qno">問${index + 1}</span>
+              <span class="print-qno">問${index + 1}<span class="print-number">　No. ${escapeHtml(q.number || "")}</span></span>
               <span class="print-source">${sourceText}</span>
             </div>
             <p class="print-sentence">${sentenceHtml}</p>
@@ -490,6 +490,11 @@
     font-weight: 700;
     color: #7a4f2a;
     white-space: nowrap;
+  }
+
+  .print-number {
+    color: #555;
+    font-weight: 400;
   }
 
   .print-source {
@@ -628,7 +633,7 @@
         createQuiz();
       } catch (error) {
         statusEl.textContent = "";
-        quizEl.innerHTML = `<div class="error"><strong>データを読み込めませんでした。</strong><br>公開時は index.html と kobun_app_data_inflected_updated.json を同じフォルダに置いてください。<br>ローカルで直接HTMLを開く場合は、ブラウザの制限でJSONを読み込めないことがあります。</div>`;
+        quizEl.innerHTML = `<div class="error"><strong>データを読み込めませんでした。</strong><br>公開時は index.html と kobun_app_data_numbered.json を同じフォルダに置いてください。<br>ローカルで直接HTMLを開く場合は、ブラウザの制限でJSONを読み込めないことがあります。</div>`;
         console.error(error);
       }
     }
