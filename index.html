@@ -221,6 +221,8 @@
   }
 }
 
+
+.source-inline { color: var(--muted); font-size: 0.95rem; }
 </style>
 </head>
 <body>
@@ -307,7 +309,9 @@
         const saved = savedMap[getQuestionKey(q)];
         card.innerHTML = `
           <button type="button" class="save-review-button${saved ? " saved" : ""}" data-index="${index}">${saved ? "★ 保存解除" : "☆ 復習用に保存"}</button>
-          <div class="card-head"><span class="question-number">Q${index + 1}</span><span>${number}</span></div>
+          <div class="card-head">
+  <span class="question-number">Q${index + 1}</span>
+  <span class="source-inline">${number ? "No. " + number : ""}</span></div>
           <p class="sentence">${sentenceHtml}</p>
           <div class="source">${sourceText}</div>
           <button type="button" class="answer-button" data-index="${index}">解答を見る</button>
@@ -549,6 +553,8 @@
       box-shadow: 0 8px 24px rgba(0,0,0,.12);
     }
   }
+
+.source-inline { color: var(--muted); font-size: 0.95rem; }
 </style>
 </head>
 <body>
