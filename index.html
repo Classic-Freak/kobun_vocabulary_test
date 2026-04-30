@@ -223,6 +223,23 @@
 
 
 .source-inline { color: var(--muted); font-size: 0.95rem; }
+
+.question-meta {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+@media (max-width: 560px) {
+  .question-meta {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 8px;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -310,8 +327,10 @@
         card.innerHTML = `
           <button type="button" class="save-review-button${saved ? " saved" : ""}" data-index="${index}">${saved ? "★ 保存解除" : "☆ 復習用に保存"}</button>
           <div class="card-head">
-  <span class="question-number">Q${index + 1}</span>
-  <span class="source-inline">${number}</span></div>
+            <span class="question-meta">
+              <span class="question-number">Q${index + 1}</span><span class="source-inline">${number}</span>
+            </span>
+          </div>
           <p class="sentence">${sentenceHtml}</p>
           <div class="source">${sourceText}</div>
           <button type="button" class="answer-button" data-index="${index}">解答を見る</button>
@@ -560,6 +579,23 @@
   }
 
 .source-inline { color: var(--muted); font-size: 0.95rem; }
+
+.question-meta {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+@media (max-width: 560px) {
+  .question-meta {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 8px;
+  }
+}
+
 </style>
 </head>
 <body>
