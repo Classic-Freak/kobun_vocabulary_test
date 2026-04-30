@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>古文単語チェックテスト</title>
+  <title>古文単語例文テスト</title>
   <style>
     :root {
       --bg: #f7f4ed;
@@ -158,6 +158,7 @@
       color: var(--muted);
       font-size: 0.92rem;
       margin: 0 0 14px;
+      text-align: right;
     }
 
     .target {
@@ -228,7 +229,7 @@
 <body>
   <main class="app">
     <header>
-      <h1>古文単語チェックテスト</h1>
+      <h1>古文単語例文テスト</h1>
       <p class="description">出典や単語の行で絞り込んで、例文リストからランダムに出題します。下線部の意味を考えてから、「解答を見る」を押してください。</p>
     </header>
 
@@ -275,6 +276,7 @@
       <button id="showAllButton" class="secondary">すべて解答表示</button>
       <button id="hideAllButton" class="secondary">すべて隠す</button>
       <button id="resetFilterButton" class="secondary">フィルタ解除</button>
+      <button id="printCombinedPdfButton" class="secondary">PDF出力（問題＋解答）</button>
     </section>
 
     <div id="status" class="status">読み込み中...</div>
@@ -435,6 +437,43 @@
       });
     }
 
+    function buildPrintableHtml() {
+      const selectedSourceText = sourceFilterEl.value || "すべての出典";
+      const selectedRowText = rowFilterEl.value || "すべての行";
+      const meta = "出典：" + escapeHtml(selectedSourceText) + "　｜　単語の行：" + escapeHtml(selectedRowText) + "　｜　" + currentQuestions.length + "問";
+
+      const problemCards = currentQuestions.map((q, index) => {
+        const sentenceHtml = renderSentence(q.sentence, q.target);
+        const sourceText = q.source ? "出典：" + escapeHtml(q.source) : "出典：未設定";
+        return "<article class=\"print-card\"><div class=\"print-head\">Q" + (index + 1) + "</div><p class=\"print-sentence\">" + sentenceHtml + "</p><div class=\"print-source\">" + sourceText + "</div></article>";
+      }).join("");
+
+      const answerCards = currentQuestions.map((q, index) => {
+        const sentenceHtml = renderSentence(q.sentence, q.target);
+        const sourceText = q.source ? "出典：" + escapeHtml(q.source) : "出典：未設定";
+        const baseHtml = q.base ? "<div class=\"print-base\">原形：" + escapeHtml(q.base) + "</div>" : "";
+        return "<article class=\"print-card\"><div class=\"print-head\">Q" + (index + 1) + "</div><p class=\"print-sentence\">" + sentenceHtml + "</p><div class=\"print-source\">" + sourceText + "</div><div class=\"print-answer\"><span class=\"print-label\">模範解答</span><div>" + escapeHtml(q.answer) + "</div>" + baseHtml + "</div></article>";
+      }).join("");
+
+      return "<!DOCTYPE html><html lang=\"ja\"><head><meta charset=\"UTF-8\"><title>古文単語例文テスト</title>" +
+        "<style>body{font-family:\"Hiragino Mincho ProN\",\"Yu Mincho\",serif;color:#222;margin:24px;line-height:1.8}h1{text-align:center;margin:0 0 8px;font-size:24px;letter-spacing:.08em}.print-meta{text-align:center;color:#666;font-size:12px;margin-bottom:18px}.print-section{break-after:page;page-break-after:always}.print-section:last-child{break-after:auto;page-break-after:auto}.print-card{break-inside:avoid;page-break-inside:avoid;border-bottom:1px solid #ddd;padding:10px 0 12px}.print-head{font-weight:bold;color:#7a4f2a;margin-bottom:4px}.print-sentence{font-size:16px;margin:0 0 4px}.target{text-decoration:underline;text-decoration-thickness:.12em;text-underline-offset:.2em;font-weight:bold}.print-source{text-align:right;color:#666;font-size:12px;margin-bottom:6px}.print-answer{margin-top:8px;padding:8px 10px;background:#f6f0e8;border-radius:8px;font-size:14px}.print-label{display:block;font-weight:bold;color:#666;font-size:12px;margin-bottom:2px}.print-base{color:#666;font-size:12px;margin-top:4px}@page{margin:14mm}</style></head><body>" +
+        "<section class=\"print-section\"><h1>古文単語例文テスト 問題</h1><div class=\"print-meta\">" + meta + "</div>" + problemCards + "</section>" +
+        "<section class=\"print-section\"><h1>古文単語例文テスト 解答</h1><div class=\"print-meta\">" + meta + "</div>" + answerCards + "</section>" +
+        "<script>window.addEventListener(\"load\",function(){window.print();});<\/script></body></html>";
+    }
+
+    function exportPdf() {
+      if (!currentQuestions.length) return;
+      const printWindow = window.open("", "_blank");
+      if (!printWindow) {
+        alert("PDF出力用の別ウィンドウを開けませんでした。ポップアップブロックを解除してください。");
+        return;
+      }
+      printWindow.document.open();
+      printWindow.document.write(buildPrintableHtml());
+      printWindow.document.close();
+    }
+
     function resetFilters() {
       sourceFilterEl.value = "";
       rowFilterEl.value = "";
@@ -451,6 +490,7 @@
     document.getElementById("showAllButton").addEventListener("click", () => setAllAnswers(true));
     document.getElementById("hideAllButton").addEventListener("click", () => setAllAnswers(false));
     document.getElementById("resetFilterButton").addEventListener("click", resetFilters);
+    document.getElementById("printCombinedPdfButton").addEventListener("click", exportPdf);
     questionCountEl.addEventListener("change", createQuiz);
     sourceFilterEl.addEventListener("change", createQuiz);
     rowFilterEl.addEventListener("change", createQuiz);
