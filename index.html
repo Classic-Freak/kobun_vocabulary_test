@@ -45,7 +45,7 @@
     .status { text-align: center; color: var(--muted); margin-bottom: 18px; min-height: 1.5em; }
     .quiz { display: grid; gap: 16px; }
     .card { background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 20px; box-shadow: var(--shadow); }
-    .card-head { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 12px; color: var(--muted); font-size: .95rem; }
+    .card-head { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin: 4px 150px 12px 0; color: var(--muted); font-size: .95rem; }
     .question-number { font-weight: 800; color: var(--accent); }
     .sentence { font-size: clamp(1.1rem, 2.8vw, 1.45rem); line-height: 1.9; margin: 0 0 6px; }
     .source { color: var(--muted); font-size: .92rem; margin: 0 0 14px; text-align: right; }
@@ -54,15 +54,35 @@
     .answer.visible { display: block; }
     .answer-label { display: block; color: var(--muted); font-size: .9rem; margin-bottom: 4px; font-weight: 700; }
     .base { color: var(--muted); font-size: .95rem; margin-top: 8px; }
-    .review-tools { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--line); }
-    .review-tools select { width: auto; min-width: 150px; padding: 10px 14px; font-size: .92rem; }
-    .review-button { padding: 10px 14px; font-size: .92rem; box-shadow: none; }
+    .card { position: relative; }
+    .save-review-button {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 13px;
+      border-radius: 999px;
+      background: #fff7ea;
+      color: var(--accent);
+      border: 1px solid #e4c89d;
+      box-shadow: 0 4px 10px rgba(122,79,42,.10);
+      font-size: .86rem;
+      font-weight: 800;
+      z-index: 2;
+    }
+    .save-review-button:hover { background: #ffefd1; color: var(--accent-dark); box-shadow: 0 7px 14px rgba(122,79,42,.16); }
+    .save-review-button.saved { background: #7a4f2a; color: #fff; border-color: #7a4f2a; }
+    .save-review-button.saved:hover { background: var(--accent-dark); color: #fff; }
+    .review-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--line); }
+    .remove-review-button { padding: 9px 13px; font-size: .9rem; box-shadow: none; }
     .review-status { color: var(--muted); font-size: .9rem; font-weight: 700; }
     .saved-badge { display: inline-flex; align-items: center; gap: 4px; color: var(--accent); background: #fff7ea; border: 1px solid var(--line); border-radius: 999px; padding: 4px 9px; font-size: .82rem; font-weight: 800; }
     .empty, .error { background: #fff0f0; border: 1px solid #f0b9b9; color: #8a1f1f; border-radius: 16px; padding: 16px; line-height: 1.7; }
     footer { margin-top: 28px; text-align: center; color: var(--muted); font-size: .9rem; }
     @media (max-width: 760px) { .toolbar { grid-template-columns: 1fr 1fr; } }
-    @media (max-width: 560px) { .app { padding: 22px 12px 36px; } .toolbar { grid-template-columns: 1fr; } .actions { align-items: stretch; } button { width: 100%; } .review-tools { align-items: stretch; } .review-tools select { width: 100%; } .card { padding: 17px; border-radius: 18px; } .card-head { align-items: flex-start; flex-direction: column; } }
+    @media (max-width: 560px) { .app { padding: 22px 12px 36px; } .toolbar { grid-template-columns: 1fr; } .actions { align-items: stretch; } button { width: 100%; } .save-review-button { position: static; width: auto; margin-bottom: 10px; } .review-row { align-items: stretch; } .card { padding: 17px; border-radius: 18px; } .card-head { align-items: flex-start; flex-direction: column; margin-right: 0; } }
   </style>
 </head>
 <body>
@@ -84,8 +104,7 @@
       <button id="hideAllButton" class="secondary">すべて隠す</button>
       <button id="resetFilterButton" class="secondary">フィルタ解除</button>
       <button id="printCombinedPdfButton" class="print-button" title="問題と解答を2ページ構成で印刷します"><span aria-hidden="true">🖨️</span> 印刷（問題＋解答）</button>
-      <div class="control"><label for="reviewTagFilter">復習タグ</label><select id="reviewTagFilter"><option value="">すべての保存済み問題</option></select></div>
-      <button id="reviewModeButton" class="secondary">保存済み問題を出題</button>
+      <button id="reviewModeButton" class="secondary">復習用に保存した問題を出題</button>
       <button id="clearSavedButton" class="danger">保存済みを全削除</button>
     </section>
 
@@ -97,7 +116,6 @@
   <script>
     const DATA_URL = "kobun_app_data_inflected_updated.json";
     const STORAGE_KEY = "kobunReviewQuestionsV1";
-    const DEFAULT_TAGS = ["難しい", "要復習", "暗記済み", "あとで"];
     let allQuestions = [];
     let currentQuestions = [];
     let reviewMode = false;
@@ -107,7 +125,6 @@
     const questionCountEl = document.getElementById("questionCount");
     const sourceFilterEl = document.getElementById("sourceFilter");
     const rowFilterEl = document.getElementById("rowFilter");
-    const reviewTagFilterEl = document.getElementById("reviewTagFilter");
 
     const rowMap = {"あ":"ア行","い":"ア行","う":"ア行","え":"ア行","お":"ア行","か":"カ行","き":"カ行","く":"カ行","け":"カ行","こ":"カ行","が":"カ行","ぎ":"カ行","ぐ":"カ行","げ":"カ行","ご":"カ行","さ":"サ行","し":"サ行","す":"サ行","せ":"サ行","そ":"サ行","ざ":"サ行","じ":"サ行","ず":"サ行","ぜ":"サ行","ぞ":"サ行","た":"タ行","ち":"タ行","つ":"タ行","て":"タ行","と":"タ行","だ":"タ行","ぢ":"タ行","づ":"タ行","で":"タ行","ど":"タ行","な":"ナ行","に":"ナ行","ぬ":"ナ行","ね":"ナ行","の":"ナ行","は":"ハ行","ひ":"ハ行","ふ":"ハ行","へ":"ハ行","ほ":"ハ行","ば":"ハ行","び":"ハ行","ぶ":"ハ行","べ":"ハ行","ぼ":"ハ行","ぱ":"ハ行","ぴ":"ハ行","ぷ":"ハ行","ぺ":"ハ行","ぽ":"ハ行","ま":"マ行","み":"マ行","む":"マ行","め":"マ行","も":"マ行","や":"ヤ行","ゆ":"ヤ行","よ":"ヤ行","ら":"ラ行","り":"ラ行","る":"ラ行","れ":"ラ行","ろ":"ラ行","わ":"ワ行","ゐ":"ワ行","ゑ":"ワ行","を":"ワ行","ん":"ワ行"};
 
@@ -117,10 +134,9 @@
     function getBaseRow(base) { return rowMap[normalizeKana(base).charAt(0)] || "その他"; }
     function getQuestionKey(q) { return [q.number ?? "", q.sentence ?? "", q.base ?? "", q.answer ?? ""].join("::"); }
     function readSavedMap() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); } catch { return {}; } }
-    function writeSavedMap(savedMap) { localStorage.setItem(STORAGE_KEY, JSON.stringify(savedMap)); populateReviewTagFilter(); }
+    function writeSavedMap(savedMap) { localStorage.setItem(STORAGE_KEY, JSON.stringify(savedMap)); }
     function getSavedEntries() { return Object.values(readSavedMap()); }
-    function getSavedQuestions(tag = "") { const savedMap = readSavedMap(); return allQuestions.map(q => ({q, saved: savedMap[getQuestionKey(q)]})).filter(item => item.saved && (!tag || item.saved.tags.includes(tag))).map(item => item.q); }
-    function getTagOptionsHtml(selected = "要復習") { return DEFAULT_TAGS.map(tag => `<option value="${escapeHtml(tag)}"${tag === selected ? " selected" : ""}>${escapeHtml(tag)}</option>`).join(""); }
+    function getSavedQuestions() { const savedMap = readSavedMap(); return allQuestions.filter(q => savedMap[getQuestionKey(q)]); }
 
     function renderSentence(sentence, target) {
       const safeSentence = escapeHtml(sentence);
@@ -133,7 +149,7 @@
     function getFilteredQuestions() { const source = sourceFilterEl.value; const row = rowFilterEl.value; return allQuestions.filter(q => (!source || String(q.source ?? "") === source) && (!row || getBaseRow(q.base) === row)); }
 
     function createQuiz() { reviewMode = false; const filtered = getFilteredQuestions(); const count = Number(questionCountEl.value); currentQuestions = shuffle(filtered).slice(0, Math.min(count, filtered.length)); renderQuiz(filtered.length); }
-    function createReviewQuiz() { reviewMode = true; const savedQuestions = getSavedQuestions(reviewTagFilterEl.value); const count = Number(questionCountEl.value); currentQuestions = shuffle(savedQuestions).slice(0, Math.min(count, savedQuestions.length)); renderQuiz(savedQuestions.length); }
+    function createReviewQuiz() { reviewMode = true; const savedQuestions = getSavedQuestions(); const count = Number(questionCountEl.value); currentQuestions = shuffle(savedQuestions).slice(0, Math.min(count, savedQuestions.length)); renderQuiz(savedQuestions.length); }
 
     function renderQuiz(filteredCount) {
       quizEl.innerHTML = "";
@@ -151,17 +167,15 @@
         const sourceText = q.source ? `出典：${escapeHtml(q.source)}` : "出典：未設定";
         const baseText = q.base ? `<div class="base">原形：${escapeHtml(q.base)}</div>` : "";
         const saved = savedMap[getQuestionKey(q)];
-        const savedTags = saved?.tags?.length ? saved.tags.map(tag => `<span class="saved-badge">⭐ ${escapeHtml(tag)}</span>`).join(" ") : "";
-        const savedInfo = savedTags ? `<span class="review-status">保存済み：</span>${savedTags}` : `<span class="review-status">未保存</span>`;
-        const removeButton = saved ? `<button type="button" class="review-button secondary remove-review-button" data-index="${index}">保存から外す</button>` : "";
+        const savedInfo = saved ? `<span class="saved-badge">⭐ 保存済み</span>` : `<span class="review-status">未保存</span>`;
+        const removeButton = saved ? `<button type="button" class="secondary remove-review-button" data-index="${index}">保存から外す</button>` : "";
         card.innerHTML = `
+          <button type="button" class="save-review-button${saved ? " saved" : ""}" data-index="${index}">${saved ? "★ 保存済み" : "☆ 復習用に保存"}</button>
           <div class="card-head"><span class="question-number">Q${index + 1}</span><span>${number}</span></div>
           <p class="sentence">${sentenceHtml}</p>
           <div class="source">${sourceText}</div>
           <button type="button" class="answer-button" data-index="${index}">解答を見る</button>
-          <div class="review-tools">
-            <select class="tag-select" data-index="${index}" aria-label="復習タグ">${getTagOptionsHtml()}</select>
-            <button type="button" class="review-button save-review-button" data-index="${index}">復習用に保存</button>
+          <div class="review-row">
             ${removeButton}
             <span class="review-summary">${savedInfo}</span>
           </div>
@@ -169,22 +183,21 @@
         quizEl.appendChild(card);
       });
       const savedCount = getSavedEntries().length;
-      if (reviewMode) { const tagText = reviewTagFilterEl.value ? `「${reviewTagFilterEl.value}」タグの` : ""; statusEl.textContent = `保存済み${savedCount}件中、${tagText}${filteredCount}件から${currentQuestions.length}問を表示中`; }
+      if (reviewMode) { statusEl.textContent = `保存済み${savedCount}件中、${filteredCount}件から${currentQuestions.length}問を表示中`; }
       else { statusEl.textContent = `${allQuestions.length}件中、条件に合う${filteredCount}件から${currentQuestions.length}問を表示中｜保存済み${savedCount}件`; }
     }
 
     function toggleAnswer(index) { const answerEl = document.getElementById(`answer-${index}`); const button = document.querySelector(`.answer-button[data-index="${index}"]`); const visible = answerEl.classList.toggle("visible"); button.textContent = visible ? "解答を隠す" : "解答を見る"; }
     function setAllAnswers(visible) { currentQuestions.forEach((_, index) => { const answerEl = document.getElementById(`answer-${index}`); const button = document.querySelector(`.answer-button[data-index="${index}"]`); if (!answerEl || !button) return; answerEl.classList.toggle("visible", visible); button.textContent = visible ? "解答を隠す" : "解答を見る"; }); }
 
-    function saveQuestionForReview(index, tag) { const q = currentQuestions[index]; if (!q) return; const key = getQuestionKey(q); const savedMap = readSavedMap(); const current = savedMap[key] || { key, tags: [], savedAt: new Date().toISOString() }; if (!current.tags.includes(tag)) current.tags.push(tag); current.updatedAt = new Date().toISOString(); savedMap[key] = current; writeSavedMap(savedMap); renderQuiz(reviewMode ? getSavedQuestions(reviewTagFilterEl.value).length : getFilteredQuestions().length); }
+    function saveQuestionForReview(index) { const q = currentQuestions[index]; if (!q) return; const key = getQuestionKey(q); const savedMap = readSavedMap(); savedMap[key] = savedMap[key] || { key, savedAt: new Date().toISOString() }; savedMap[key].updatedAt = new Date().toISOString(); writeSavedMap(savedMap); renderQuiz(reviewMode ? getSavedQuestions().length : getFilteredQuestions().length); }
     function removeQuestionFromReview(index) { const q = currentQuestions[index]; if (!q) return; const savedMap = readSavedMap(); delete savedMap[getQuestionKey(q)]; writeSavedMap(savedMap); if (reviewMode) createReviewQuiz(); else renderQuiz(getFilteredQuestions().length); }
 
     function populateSourceFilter() { const sources = [...new Set(allQuestions.map(q => String(q.source ?? "").trim()).filter(Boolean))].sort((a,b) => a.localeCompare(b, "ja")); sources.forEach(source => { const option = document.createElement("option"); option.value = source; option.textContent = source; sourceFilterEl.appendChild(option); }); }
-    function populateReviewTagFilter() { const previous = reviewTagFilterEl.value; const savedTags = [...new Set(getSavedEntries().flatMap(item => item.tags || []))]; const tags = [...new Set([...DEFAULT_TAGS, ...savedTags])]; reviewTagFilterEl.innerHTML = `<option value="">すべての保存済み問題</option>`; tags.forEach(tag => { const option = document.createElement("option"); option.value = tag; option.textContent = tag; reviewTagFilterEl.appendChild(option); }); if ([...reviewTagFilterEl.options].some(option => option.value === previous)) reviewTagFilterEl.value = previous; }
 
     function buildPrintableHtml() {
       const selectedSourceText = reviewMode ? "保存済み問題" : (sourceFilterEl.value || "すべての出典");
-      const selectedRowText = reviewMode ? (reviewTagFilterEl.value || "すべてのタグ") : (rowFilterEl.value || "すべての行");
+      const selectedRowText = reviewMode ? "復習用に保存" : (rowFilterEl.value || "すべての行");
       const meta = "出題条件：" + escapeHtml(selectedSourceText) + "　｜　" + escapeHtml(selectedRowText) + "　｜　" + currentQuestions.length + "問";
       const problemCards = currentQuestions.map((q, index) => { const sentenceHtml = renderSentence(q.sentence, q.target); const sourceText = q.source ? "出典：" + escapeHtml(q.source) : "出典：未設定"; return `<article class="print-card"><div class="print-head">Q${index + 1}</div><p class="print-sentence">${sentenceHtml}</p><div class="print-source">${sourceText}</div></article>`; }).join("");
       const answerCards = currentQuestions.map((q, index) => { const sentenceHtml = renderSentence(q.sentence, q.target); const sourceText = q.source ? "出典：" + escapeHtml(q.source) : "出典：未設定"; const baseHtml = q.base ? `<div class="print-base">原形：${escapeHtml(q.base)}</div>` : ""; return `<article class="print-card"><div class="print-head">Q${index + 1}</div><p class="print-sentence">${sentenceHtml}</p><div class="print-source">${sourceText}</div><div class="print-answer"><span class="print-label">模範解答</span><div>${escapeHtml(q.answer)}</div>${baseHtml}</div></article>`; }).join("");
@@ -192,14 +205,14 @@
     }
 
     function exportPdf() { if (!currentQuestions.length) return; const printWindow = window.open("", "_blank"); if (!printWindow) { alert("印刷用の別ウィンドウを開けませんでした。ポップアップブロックを解除してください。"); return; } printWindow.document.open(); printWindow.document.write(buildPrintableHtml()); printWindow.document.close(); }
-    function resetFilters() { sourceFilterEl.value = ""; rowFilterEl.value = ""; reviewTagFilterEl.value = ""; createQuiz(); }
-    function clearSavedQuestions() { if (!confirm("保存済み問題をすべて削除しますか？")) return; localStorage.removeItem(STORAGE_KEY); populateReviewTagFilter(); if (reviewMode) createReviewQuiz(); else renderQuiz(getFilteredQuestions().length); }
+    function resetFilters() { sourceFilterEl.value = ""; rowFilterEl.value = ""; createQuiz(); }
+    function clearSavedQuestions() { if (!confirm("保存済み問題をすべて削除しますか？")) return; localStorage.removeItem(STORAGE_KEY); if (reviewMode) createReviewQuiz(); else renderQuiz(getFilteredQuestions().length); }
 
     quizEl.addEventListener("click", event => {
       const answerButton = event.target.closest(".answer-button");
       if (answerButton) { toggleAnswer(Number(answerButton.dataset.index)); return; }
       const saveButton = event.target.closest(".save-review-button");
-      if (saveButton) { const index = Number(saveButton.dataset.index); const tagSelect = document.querySelector(`.tag-select[data-index="${index}"]`); saveQuestionForReview(index, tagSelect?.value || "要復習"); return; }
+      if (saveButton) { saveQuestionForReview(Number(saveButton.dataset.index)); return; }
       const removeButton = event.target.closest(".remove-review-button");
       if (removeButton) removeQuestionFromReview(Number(removeButton.dataset.index));
     });
@@ -214,8 +227,6 @@
     questionCountEl.addEventListener("change", () => reviewMode ? createReviewQuiz() : createQuiz());
     sourceFilterEl.addEventListener("change", createQuiz);
     rowFilterEl.addEventListener("change", createQuiz);
-    reviewTagFilterEl.addEventListener("change", () => { if (reviewMode) createReviewQuiz(); });
-
     async function loadData() {
       try {
         const response = await fetch(DATA_URL);
@@ -223,7 +234,6 @@
         allQuestions = await response.json();
         allQuestions = allQuestions.filter(q => q && q.sentence && q.answer);
         populateSourceFilter();
-        populateReviewTagFilter();
         createQuiz();
       } catch (error) {
         statusEl.textContent = "";
