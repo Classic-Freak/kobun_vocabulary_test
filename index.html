@@ -104,8 +104,8 @@
       <button id="hideAllButton" class="secondary">すべて隠す</button>
       <button id="resetFilterButton" class="secondary">フィルタ解除</button>
       <button id="printCombinedPdfButton" class="print-button" title="問題と解答を2ページ構成で印刷します"><span aria-hidden="true">🖨️</span> 印刷（問題＋解答）</button>
-      <button id="reviewModeButton" class="secondary">復習用に保存した問題を出題</button>
-      <button id="clearSavedButton" class="danger">保存済みを全削除</button>
+      <button id="reviewModeButton" class="secondary">保存した問題を出題</button>
+      <button id="clearSavedButton" class="danger">保存を全削除</button>
     </section>
 
     <div id="status" class="status">読み込み中...</div>
@@ -154,7 +154,7 @@
     function renderQuiz(filteredCount) {
       quizEl.innerHTML = "";
       if (currentQuestions.length === 0) {
-        if (reviewMode) { statusEl.textContent = "保存済み問題は0件です"; quizEl.innerHTML = `<div class="empty">保存済み問題がありません。各問題の「復習用に保存」から追加してください。</div>`; }
+        if (reviewMode) { statusEl.textContent = "保存問題は0件です"; quizEl.innerHTML = `<div class="empty">保存問題がありません。各問題の「保存」から追加してください。</div>`; }
         else { statusEl.textContent = `${allQuestions.length}件中、条件に合う問題は0件です`; quizEl.innerHTML = `<div class="empty">条件に合う問題がありません。フィルタを変更してください。</div>`; }
         return;
       }
@@ -164,13 +164,15 @@
         card.className = "card";
         const number = q.number ? `No. ${escapeHtml(q.number)}` : "";
         const sentenceHtml = renderSentence(q.sentence, q.target);
+        const saved = JSON.parse(localStorage.getItem("savedQuestions") || "[]");
+        const isSaved = saved.some(item => item.sentence === q.sentence);
         const sourceText = q.source ? `出典：${escapeHtml(q.source)}` : "出典：未設定";
         const baseText = q.base ? `<div class="base">原形：${escapeHtml(q.base)}</div>` : "";
         const saved = savedMap[getQuestionKey(q)];
-        const savedInfo = saved ? `<span class="saved-badge">⭐ 保存済み</span>` : `<span class="review-status">未保存</span>`;
+        const savedInfo = saved ? `<span class="saved-badge">⭐ 保存</span>` : `<span class="review-status">未保存</span>`;
         const removeButton = saved ? `<button type="button" class="secondary remove-review-button" data-index="${index}">保存から外す</button>` : "";
         card.innerHTML = `
-          <button type="button" class="save-review-button${saved ? " saved" : ""}" data-index="${index}">${saved ? "★ 保存済み" : "☆ 復習用に保存"}</button>
+          <button type="button" class="save-review-button${saved ? " saved" : ""}" data-index="${index}">${saved ? "★ 保存" : "☆ 保存"}</button>
           <div class="card-head"><span class="question-number">Q${index + 1}</span><span>${number}</span></div>
           <p class="sentence">${sentenceHtml}</p>
           <div class="source">${sourceText}</div>
@@ -183,8 +185,8 @@
         quizEl.appendChild(card);
       });
       const savedCount = getSavedEntries().length;
-      if (reviewMode) { statusEl.textContent = `保存済み${savedCount}件中、${filteredCount}件から${currentQuestions.length}問を表示中`; }
-      else { statusEl.textContent = `${allQuestions.length}件中、条件に合う${filteredCount}件から${currentQuestions.length}問を表示中｜保存済み${savedCount}件`; }
+      if (reviewMode) { statusEl.textContent = `保存${savedCount}件中、${filteredCount}件から${currentQuestions.length}問を表示中`; }
+      else { statusEl.textContent = `${allQuestions.length}件中、条件に合う${filteredCount}件から${currentQuestions.length}問を表示中｜保存${savedCount}件`; }
     }
 
     function toggleAnswer(index) { const answerEl = document.getElementById(`answer-${index}`); const button = document.querySelector(`.answer-button[data-index="${index}"]`); const visible = answerEl.classList.toggle("visible"); button.textContent = visible ? "解答を隠す" : "解答を見る"; }
@@ -196,17 +198,21 @@
     function populateSourceFilter() { const sources = [...new Set(allQuestions.map(q => String(q.source ?? "").trim()).filter(Boolean))].sort((a,b) => a.localeCompare(b, "ja")); sources.forEach(source => { const option = document.createElement("option"); option.value = source; option.textContent = source; sourceFilterEl.appendChild(option); }); }
 
     function buildPrintableHtml() {
-      const selectedSourceText = reviewMode ? "保存済み問題" : (sourceFilterEl.value || "すべての出典");
-      const selectedRowText = reviewMode ? "復習用に保存" : (rowFilterEl.value || "すべての行");
+      const selectedSourceText = reviewMode ? "保存問題" : (sourceFilterEl.value || "すべての出典");
+      const selectedRowText = reviewMode ? "保存" : (rowFilterEl.value || "すべての行");
       const meta = "出題条件：" + escapeHtml(selectedSourceText) + "　｜　" + escapeHtml(selectedRowText) + "　｜　" + currentQuestions.length + "問";
-      const problemCards = currentQuestions.map((q, index) => { const sentenceHtml = renderSentence(q.sentence, q.target); const sourceText = q.source ? "出典：" + escapeHtml(q.source) : "出典：未設定"; return `<article class="print-card"><div class="print-head">Q${index + 1}</div><p class="print-sentence">${sentenceHtml}</p><div class="print-source">${sourceText}</div></article>`; }).join("");
-      const answerCards = currentQuestions.map((q, index) => { const sentenceHtml = renderSentence(q.sentence, q.target); const sourceText = q.source ? "出典：" + escapeHtml(q.source) : "出典：未設定"; const baseHtml = q.base ? `<div class="print-base">原形：${escapeHtml(q.base)}</div>` : ""; return `<article class="print-card"><div class="print-head">Q${index + 1}</div><p class="print-sentence">${sentenceHtml}</p><div class="print-source">${sourceText}</div><div class="print-answer"><span class="print-label">模範解答</span><div>${escapeHtml(q.answer)}</div>${baseHtml}</div></article>`; }).join("");
+      const problemCards = currentQuestions.map((q, index) => { const sentenceHtml = renderSentence(q.sentence, q.target);
+        const saved = JSON.parse(localStorage.getItem("savedQuestions") || "[]");
+        const isSaved = saved.some(item => item.sentence === q.sentence); const sourceText = q.source ? "出典：" + escapeHtml(q.source) : "出典：未設定"; return `<article class="print-card"><div class="print-head">Q${index + 1}</div><p class="print-sentence">${sentenceHtml}</p><div class="print-source">${sourceText}</div></article>`; }).join("");
+      const answerCards = currentQuestions.map((q, index) => { const sentenceHtml = renderSentence(q.sentence, q.target);
+        const saved = JSON.parse(localStorage.getItem("savedQuestions") || "[]");
+        const isSaved = saved.some(item => item.sentence === q.sentence); const sourceText = q.source ? "出典：" + escapeHtml(q.source) : "出典：未設定"; const baseHtml = q.base ? `<div class="print-base">原形：${escapeHtml(q.base)}</div>` : ""; return `<article class="print-card"><div class="print-head">Q${index + 1}</div><p class="print-sentence">${sentenceHtml}</p><div class="print-source">${sourceText}</div><div class="print-answer"><span class="print-label">模範解答</span><div>${escapeHtml(q.answer)}</div>${baseHtml}</div></article>`; }).join("");
       return `<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><title>古文単語例文テスト</title><style>@page{size:A4 portrait;margin:12mm 13mm}*{box-sizing:border-box}body{font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho",serif;color:#222;margin:0;line-height:1.65;font-size:12.5pt}h1{text-align:center;margin:0 0 4mm;font-size:18pt;letter-spacing:.08em}.print-meta{text-align:center;color:#666;font-size:9.5pt;margin-bottom:5mm}.print-section{break-after:page;page-break-after:always}.print-section:last-child{break-after:auto;page-break-after:auto}.print-card{break-inside:avoid;page-break-inside:avoid;border-bottom:1px solid #d8d0c5;padding:3.2mm 0 3.6mm}.print-head{font-weight:bold;color:#7a4f2a;margin-bottom:1mm;font-size:11pt}.print-sentence{font-size:13pt;margin:0 0 1mm;line-height:1.8}.target{text-decoration:underline;text-decoration-thickness:.11em;text-underline-offset:.2em;font-weight:bold}.print-source{text-align:right;color:#666;font-size:9.5pt;margin:0 0 1mm}.print-answer{margin-top:2mm;padding:2.2mm 3mm;background:#f6f0e8;border:1px solid #e3d8c8;border-radius:3mm;font-size:11.5pt}.print-label{display:block;font-weight:bold;color:#666;font-size:9.5pt;margin-bottom:1mm}.print-base{color:#666;font-size:9.5pt;margin-top:1mm}.print-footer{position:fixed;bottom:5mm;left:13mm;right:13mm;text-align:center;color:#999;font-size:8.5pt}@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style></head><body><section class="print-section"><h1>古文単語例文テスト 問題</h1><div class="print-meta">${meta}</div>${problemCards}<div class="print-footer">問題</div></section><section class="print-section"><h1>古文単語例文テスト 解答</h1><div class="print-meta">${meta}</div>${answerCards}<div class="print-footer">解答</div></section><script>window.addEventListener("load",function(){window.print();});<\/script></body></html>`;
     }
 
     function exportPdf() { if (!currentQuestions.length) return; const printWindow = window.open("", "_blank"); if (!printWindow) { alert("印刷用の別ウィンドウを開けませんでした。ポップアップブロックを解除してください。"); return; } printWindow.document.open(); printWindow.document.write(buildPrintableHtml()); printWindow.document.close(); }
     function resetFilters() { sourceFilterEl.value = ""; rowFilterEl.value = ""; createQuiz(); }
-    function clearSavedQuestions() { if (!confirm("保存済み問題をすべて削除しますか？")) return; localStorage.removeItem(STORAGE_KEY); if (reviewMode) createReviewQuiz(); else renderQuiz(getFilteredQuestions().length); }
+    function clearSavedQuestions() { if (!confirm("保存問題をすべて削除しますか？")) return; localStorage.removeItem(STORAGE_KEY); if (reviewMode) createReviewQuiz(); else renderQuiz(getFilteredQuestions().length); }
 
     quizEl.addEventListener("click", event => {
       const answerButton = event.target.closest(".answer-button");
