@@ -346,87 +346,249 @@
     function buildPrintableHtml() {
       const selectedSourceText = reviewMode ? "保存済み問題" : (sourceFilterEl.value || "すべての出典");
       const selectedRowText = reviewMode ? "復習用に保存" : (rowFilterEl.value || "すべての行");
-      const meta = "出題条件：" + escapeHtml(selectedSourceText) + "　｜　" + escapeHtml(selectedRowText) + "　｜　" + currentQuestions.length + "問";
-      const problemCards = currentQuestions.map((q, index) => { const sentenceHtml = renderSentence(q.sentence, q.target); const sourceText = q.source ? "出典：" + escapeHtml(q.source) : "出典：未設定"; return `<article class="print-card"><div class="print-head">Q${index + 1}</div><p class="print-sentence">${sentenceHtml}</p><div class="print-source">${sourceText}</div></article>`; }).join("");
-      const answerCards = currentQuestions.map((q, index) => { const sentenceHtml = renderSentence(q.sentence, q.target); const sourceText = q.source ? "出典：" + escapeHtml(q.source) : "出典：未設定"; const baseHtml = q.base ? `<div class="print-base">原形：${escapeHtml(q.base)}</div>` : ""; return `<article class="print-card"><div class="print-head">Q${index + 1}</div><p class="print-sentence">${sentenceHtml}</p><div class="print-source">${sourceText}</div><div class="print-answer"><span class="print-label">模範解答</span><div>${escapeHtml(q.answer)}</div>${baseHtml}</div></article>`; }).join("");
-      return `<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><title>古文単語例文テスト</title><style>@page{size:A4 portrait;margin:12mm 13mm}*{box-sizing:border-box}body{font-family:"Hiragino Mincho ProN","Yu Mincho","YuMincho",serif;color:#222;margin:0;line-height:1.65;font-size:12.5pt}h1{text-align:center;margin:0 0 4mm;font-size:18pt;letter-spacing:.08em}.print-meta{text-align:center;color:#666;font-size:9.5pt;margin-bottom:5mm}.print-section{break-after:page;page-break-after:always}.print-section:last-child{break-after:auto;page-break-after:auto}.print-card{break-inside:avoid;page-break-inside:avoid;border-bottom:1px solid #d8d0c5;padding:3.2mm 0 3.6mm}.print-head{font-weight:bold;color:#7a4f2a;margin-bottom:1mm;font-size:11pt}.print-sentence{font-size:13pt;margin:0 0 1mm;line-height:1.8}.target{text-decoration:underline;text-decoration-thickness:.11em;text-underline-offset:.2em;font-weight:bold}.print-source{text-align:right;color:#666;font-size:9.5pt;margin:0 0 1mm}.print-answer{margin-top:2mm;padding:2.2mm 3mm;background:#f6f0e8;border:1px solid #e3d8c8;border-radius:3mm;font-size:11.5pt}.print-label{display:block;font-weight:bold;color:#666;font-size:9.5pt;margin-bottom:1mm}.print-base{color:#666;font-size:9.5pt;margin-top:1mm}.print-footer{position:fixed;bottom:5mm;left:13mm;right:13mm;text-align:center;color:#999;font-size:8.5pt}@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
-/* Dark mode */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #181614;
-    --card: #24211d;
-    --text: #f3eadf;
-    --muted: #b8aa98;
-    --accent: #d09a5b;
-    --accent-dark: #b77f3c;
-    --line: #3a332b;
-    --answer-bg: #302a23;
-    --shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+      const today = new Date();
+      const dateText = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日`;
+      const meta = `出題条件：${escapeHtml(selectedSourceText)}　｜　${escapeHtml(selectedRowText)}　｜　${currentQuestions.length}問`;
+
+      const problemCards = currentQuestions.map((q, index) => {
+        const sentenceHtml = renderSentence(q.sentence, q.target);
+        const sourceText = q.source ? `出典：${escapeHtml(q.source)}` : "出典：未設定";
+        return `
+          <article class="print-card">
+            <div class="print-head">
+              <span class="print-qno">問${index + 1}</span>
+              <span class="print-source">${sourceText}</span>
+            </div>
+            <p class="print-sentence">${sentenceHtml}</p>
+          </article>
+        `;
+      }).join("");
+
+      const answerCards = currentQuestions.map((q, index) => {
+        const sentenceHtml = renderSentence(q.sentence, q.target);
+        const sourceText = q.source ? `出典：${escapeHtml(q.source)}` : "出典：未設定";
+        const baseHtml = q.base ? `<div class="print-base">原形：${escapeHtml(q.base)}</div>` : "";
+        return `
+          <article class="print-card">
+            <div class="print-head">
+              <span class="print-qno">問${index + 1}</span>
+              <span class="print-source">${sourceText}</span>
+            </div>
+            <p class="print-sentence">${sentenceHtml}</p>
+            <div class="print-answer">
+              <span class="print-label">模範解答</span>
+              <div>${escapeHtml(q.answer)}</div>
+              ${baseHtml}
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      return `<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>古文単語例文テスト</title>
+<style>
+  @page {
+    size: A4 portrait;
+    margin: 13mm 12mm;
+  }
+
+  * {
+    box-sizing: border-box;
   }
 
   body {
-    background: radial-gradient(circle at top, #2a241e 0%, var(--bg) 50%, #11100f 100%);
-    color: var(--text);
+    margin: 0;
+    color: #1f1f1f;
+    background: #fff;
+    font-family: "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", "Noto Serif JP", serif;
+    line-height: 1.65;
+    font-size: 11.5pt;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 
-  select,
-  .secondary {
-    background: #24211d;
-    color: var(--text);
-    border-color: var(--line);
+  .print-page {
+    min-height: 270mm;
+    page-break-after: always;
   }
 
-  .card {
-    background: var(--card);
-    border-color: var(--line);
+  .print-page:last-child {
+    page-break-after: auto;
   }
 
-  .answer {
-    background: var(--answer-bg);
+  .print-title {
+    border-bottom: 2px solid #222;
+    padding-bottom: 3.5mm;
+    margin-bottom: 5mm;
   }
 
-  .error {
-    background: #3a1f1f;
-    border-color: #7d3a3a;
-    color: #ffd5d5;
-  }
-}
-
-
-@media (max-width: 560px) {
-  .card {
-    position: relative;
+  .print-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 8mm;
   }
 
-  .card .save-button,
-  .card .review-save-button,
-  .card .save-toggle-button {
-    position: static;
-    width: auto;
-    align-self: flex-start;
+  h1 {
+    margin: 0;
+    font-size: 18pt;
+    letter-spacing: 0.08em;
+    font-weight: 700;
   }
 
-  .card-head {
-    width: 100%;
-  }
-}
-
-
-@media (max-width: 560px) {
-  .card {
-    position: relative;
+  .print-date {
+    font-size: 9.5pt;
+    color: #444;
+    white-space: nowrap;
   }
 
-  .card .save-button,
-  .card .review-save-button,
-  .card .save-toggle-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
+  .print-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 6mm;
+    margin-top: 3mm;
+    font-size: 9.5pt;
+    color: #555;
   }
-}
 
-</style></head><body><section class="print-section"><h1>古文単語例文テスト 問題</h1><div class="print-meta">${meta}</div>${problemCards}<div class="print-footer">問題</div></section><section class="print-section"><h1>古文単語例文テスト 解答</h1><div class="print-meta">${meta}</div>${answerCards}<div class="print-footer">解答</div></section><script>window.addEventListener("load",function(){window.print();});<\/script></body></html>`;
+  .name-box {
+    white-space: nowrap;
+  }
+
+  .print-list {
+    display: grid;
+    gap: 3.2mm;
+  }
+
+  .print-card {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    border: 1px solid #b8aa98;
+    border-radius: 2.5mm;
+    padding: 3.2mm 3.5mm;
+    background: #fffdf8;
+  }
+
+  .print-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8mm;
+    margin-bottom: 1.2mm;
+    font-size: 9.5pt;
+    color: #555;
+  }
+
+  .print-qno {
+    font-weight: 700;
+    color: #7a4f2a;
+    white-space: nowrap;
+  }
+
+  .print-source {
+    text-align: right;
+  }
+
+  .print-sentence {
+    margin: 0;
+    font-size: 12.8pt;
+    line-height: 1.85;
+  }
+
+  .target {
+    text-decoration: underline;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 3px;
+    font-weight: 700;
+    background: transparent;
+  }
+
+  .print-answer {
+    margin-top: 2.2mm;
+    padding-top: 2.2mm;
+    border-top: 1px dashed #8c8176;
+    font-size: 11pt;
+    line-height: 1.7;
+  }
+
+  .print-label {
+    display: inline-block;
+    min-width: 4.5em;
+    font-weight: 700;
+    color: #7a4f2a;
+  }
+
+  .print-base {
+    margin-top: 1mm;
+    color: #555;
+    font-size: 10pt;
+  }
+
+  .print-footer {
+    margin-top: 5mm;
+    text-align: center;
+    font-size: 8.5pt;
+    color: #777;
+  }
+
+  @media screen {
+    body {
+      padding: 18px;
+      background: #f7f4ed;
+    }
+
+    .print-page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto 18px;
+      padding: 13mm 12mm;
+      background: #fff;
+      box-shadow: 0 8px 24px rgba(0,0,0,.12);
+    }
+  }
+</style>
+</head>
+<body>
+  <section class="print-page">
+    <div class="print-title">
+      <div class="print-title-row">
+        <h1>古文単語例文テスト　問題</h1>
+        <div class="print-date">${dateText}</div>
+      </div>
+      <div class="print-meta">
+        <div>${meta}</div>
+        <div class="name-box">氏名：＿＿＿＿＿＿＿＿＿＿</div>
+      </div>
+    </div>
+    <div class="print-list">${problemCards}</div>
+    <div class="print-footer">問題</div>
+  </section>
+
+  <section class="print-page">
+    <div class="print-title">
+      <div class="print-title-row">
+        <h1>古文単語例文テスト　解答</h1>
+        <div class="print-date">${dateText}</div>
+      </div>
+      <div class="print-meta">
+        <div>${meta}</div>
+        <div class="name-box">氏名：＿＿＿＿＿＿＿＿＿＿</div>
+      </div>
+    </div>
+    <div class="print-list">${answerCards}</div>
+    <div class="print-footer">解答</div>
+  </section>
+
+  <script>
+    window.addEventListener("load", function() {
+      window.print();
+    });
+  <\/script>
+</body>
+</html>`;
     }
 
     function exportPdf() { if (!currentQuestions.length) return; const printWindow = window.open("", "_blank"); if (!printWindow) { alert("印刷用の別ウィンドウを開けませんでした。ポップアップブロックを解除してください。"); return; } printWindow.document.open(); printWindow.document.write(buildPrintableHtml()); printWindow.document.close(); }
