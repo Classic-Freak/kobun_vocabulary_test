@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://classic-freak.github.io/kobun_vocabulary_test/sitemap.xml
